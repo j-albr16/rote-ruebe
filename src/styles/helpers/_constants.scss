@@ -1,0 +1,32 @@
+$color: (
+  primary: #4d8a50,
+  primaryVariant: #86b387,
+  secondary: #bfab21,
+  secondaryVariant: #e0c977,
+
+  onSurface: black,
+  onPrimary: white,
+  onSecondary: white,
+  onError: white,
+
+  error: #d9321e,
+  surface: white,
+);
+
+$text: (
+  size: (
+    body: 14px,
+    subtitle: 20px,
+    headline: 30px,
+  ),
+  thickness: (
+    thin: normal,
+    medium: 600,
+    thick: bold,
+  ),
+);
+
+$border: (
+  thin: thin,
+  thick: thick,
+);
