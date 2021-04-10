@@ -6,5 +6,4 @@ import {Component, Output} from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  @Output() title = 'rote-ruebe';
 }
