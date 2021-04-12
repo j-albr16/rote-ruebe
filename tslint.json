@@ -12,7 +12,12 @@
     },
     "array-type": false,
     "arrow-return-shorthand": true,
-    "curly": true,
+    // TODO: Do we want this ?
+    "curly": [
+      true,
+      "ignore-same-line",
+      "as-needed"
+    ],
     "deprecation": {
       "severity": "warning"
     },
@@ -108,7 +113,8 @@
       "options": [
         "ban-keywords",
         "check-format",
-        "allow-pascal-case"
+        "allow-pascal-case",
+        "allow-snake-case"
       ]
     },
     "whitespace": {
