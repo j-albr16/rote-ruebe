@@ -10,6 +10,7 @@ $color: (
   onError: white,
 
   error: #d9321e,
+  valid: #72d235,
   surface: white,
 );
 
@@ -27,6 +28,6 @@ $text: (
 );
 
 $border: (
-  thin: thin,
-  thick: thick,
+  thin: 5px,
+  thick: 10px,
 );

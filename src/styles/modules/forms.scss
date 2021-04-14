@@ -1,0 +1,64 @@
+@use "sass:map";
+@import "src/styles/helpers/constants";
+
+.form-wrapper {
+  width: 100%;
+  display: flex;
+  justify-self: center;
+  justify-content: center;
+  &:hover {
+    background: linear-gradient(0% map.get($color,secondary),100% map.get($color,primary));
+  }
+  .form-element {
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    padding: 10px;
+    justify-content: start;
+    width: 50%;
+  }
+
+  label {
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+  }
+
+  .text-field, .text-area {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    border-radius: 10px;
+    border-color: map.get($color, primary);
+  }
+
+  .check-box {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+
+  .form {
+    flex-direction: column;
+    display: flex;
+    width: 70%;
+    align-self: center;
+    justify-content: space-evenly;
+    border: 5px solid black;
+    justify-self: center;
+    //align-content: center;
+    //align-self: center;
+  }
+
+  input.ng-valid, textarea.ng-valid {
+    //@extend .text-field;
+    border-left: map.get($border, thin) solid map.get($color, valid);
+  }
+
+  input.ng-invalid, textarea.ng-invalid {
+    //@extend .text-field;
+    border-left: map.get($border, thin) solid map.get($color, error);
+  }
+}

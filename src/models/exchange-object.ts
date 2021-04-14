@@ -1,5 +1,6 @@
 import {staticImplements} from './model-helper';
 import type Image from './image';
+import type User from './user';
 
 interface ExchangeObjectAttributes {
   id: string;
@@ -12,6 +13,7 @@ interface ExchangeObjectAttributes {
   exchange: string;
   expiryDate?: Date;
   b_free: boolean;
+  b_anonymous: boolean;
   provider?: User; // anonymous possible
   imageList: Image[];
 // TODO: Implement Category Implement Tag
@@ -38,6 +40,7 @@ export default class ExchangeObject implements ExchangeObjectMethods, ExchangeOb
   public exchange!: string;
   public expiryDate?: Date;
   public b_free!: boolean;
+  public b_anonymous!: boolean;
   public provider?: User; // anonymous possible
   public imageList!: Image[];
   public readonly createdAt!: Date;
@@ -55,6 +58,7 @@ export default class ExchangeObject implements ExchangeObjectMethods, ExchangeOb
     this.b_free = constructor.b_free;
     this.provider = constructor.provider;
     this.imageList = constructor.imageList;
+    this.b_anonymous = constructor.b_anonymous;
   }
 
   public static fromJson(json: string): ExchangeObject {
