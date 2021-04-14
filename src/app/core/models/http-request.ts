@@ -1,5 +1,5 @@
 import {staticImplements} from './model-helper';
-import {PathKey, read, write} from '../utils/file';
+import {PathKey, read, write} from '../../../utils/file';
 
 interface HttpRequestAttributes {
   b_valid: boolean;
