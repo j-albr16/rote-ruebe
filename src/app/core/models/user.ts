@@ -8,8 +8,14 @@ interface UserAttributes {
   email: string;
   createdAt: Date;
   image?: Image;
-  password?: string;
+  loginToken?: string;
 }
+
+type Optional<T> = {
+  [P in keyof T]?: T[P];
+}
+
+
 
 interface UserMethods {
   toJson(): string;
@@ -22,13 +28,13 @@ interface UserStatics {
 }
 
 @staticImplements<UserStatics>()
-export default class User implements UserAttributes, UserMethods {
+export default class User implements UserAttributes {
   public id!: string;
   public userName!: string;
   public description?: string;
   public email!: string;
   public image?: Image;
-  public password?: string;
+  public loginToken?: string;
   public readonly createdAt!: Date;
 
   constructor(constructor: UserAttributes) {
@@ -37,18 +43,20 @@ export default class User implements UserAttributes, UserMethods {
     this.description = constructor.description;
     this.email = constructor.email;
     this.image = constructor.image;
-    this.password = constructor.password;
     this.createdAt = constructor.createdAt;
+    this.loginToken = constructor.loginToken;
   }
 
-  public static fromJson(json: string): User {
-    const object = JSON.parse(json);
+  public static fromJson(json: UserAttributes): User {
+    const object = {...json};
     object.createdAt = new Date(object.createdAt);
     return new User(object);
   }
 
   public toJson(): string {
-    return JSON.stringify(this);
+    const object: any = {...this};
+    object.createdAt = object.createdAt.toISOString();
+    return object;
   }
 
 }
