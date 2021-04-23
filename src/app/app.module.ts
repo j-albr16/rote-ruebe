@@ -1,37 +1,45 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
-import { AppComponent } from './app.component';
-import {ExtraOptions, RouterModule, Routes} from '@angular/router';
-import {listLazyRoutes} from '@angular/compiler/src/aot/lazy_routes';
-import { CreateExchangeObjectComponent } from './components/create-exchange-object/create-exchange-object.component';
+import {AppComponent} from './app.component';
+import {RouterModule, Routes} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { ImageUploadComponent } from './components/image-upload/image-upload.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {AuthService} from '@core/services/index';
+import {AuthInterceptor} from '@core/interceptor/auth.interceptor';
+import {ErrorInterceptor} from '@core/interceptor/error.interceptor';
+import {JsonInterceptor} from '@core/interceptor/json.interceptor';
+import {AuthModule} from './features/auth/auth.module';
+import {SharedModule} from '@shared/shared.module';
+import {RoutingModule} from '@core/utils/routing/routing.module';
+import {CoreModule} from '@core/core.module';
 
-const routes: Routes = [
-  // {path : 'detail', component: DetailComponent},
-  // {path: '', component: MainComponent}
+const httpInterceptorProviders = [
+  {provider: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+  {provider: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+  {provider: HTTP_INTERCEPTORS, useClass: JsonInterceptor, multi: true}
 ];
-
-// const config: ExtraOptions = {
-// };
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    CreateExchangeObjectComponent,
-    ImageUploadComponent,
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(routes),
     FormsModule,
+    AuthModule,
+    SharedModule,
     ReactiveFormsModule,
+    RoutingModule,
     HttpClientModule,
+    CoreModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    AuthService,
+    httpInterceptorProviders,
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {
+}

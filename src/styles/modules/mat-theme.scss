@@ -1,0 +1,20 @@
+@use "sass:map";
+@import "~@angular/material/theming", "helpers/_constants";
+
+
+@include mat-core();
+
+$candy-app-primary: mat-palette($mat-indigo);
+$candy-app-accent: mat-palette($mat-amber);
+$candy-app-warn: mat-palette($mat-red);
+$candy-app-theme: mat-light-theme((
+  color: (
+    primary: $candy-app-primary,
+    accent: $candy-app-accent,
+    warn: $candy-app-warn,
+    error: $candy-app-warn,
+  )
+));
+
+@include angular-material-theme($candy-app-theme);
+

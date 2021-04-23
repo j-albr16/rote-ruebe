@@ -2,12 +2,14 @@ import {existsSync, readFile, writeFile} from 'fs';
 import {resolve} from 'path';
 
 
-export enum PathKey {HttpLog}
+export enum PathKey {HttpRequest, HttpError, HttpResponse}
 
 export const PATH_ROOT = resolve(__dirname, '../');
 
 const paths = {
-    HttpLog: resolve(PATH_ROOT, 'data', 'http-log.txt')
+    HttpRequest: resolve(PATH_ROOT, 'data', 'log', 'http-request-log.txt'),
+  HttpResponse: resolve(PATH_ROOT, 'data', 'log', 'http-response-log.txt'),
+  HttpError: resolve(PATH_ROOT, 'data', 'log', '')
 };
 
 export const getPath = (pathKey: PathKey) => {
