@@ -1,0 +1,33 @@
+<form [formGroup]="authForm" (ngSubmit)="submit()" class="form">
+
+  <ng-container *ngIf="errorList.length != 0">
+    <p *ngFor="let errorMessage of errorList">
+      {{errorMessage}}
+    </p>
+  </ng-container>
+
+  <mat-form-field *ngFor="let formField of getFormFieldList()"
+                  appearance="fill" [floatLabel]="floatLabelControl.value"
+                  [hideRequiredMarker]="hideRequiredControl.value" class="form__field">
+
+    <mat-label>
+      {{formField}}
+    </mat-label>
+
+    <input matInput placeholder="{{formMask[formField].hint}}"
+           type="{{getInputType(formField)}}" [formControlName]="formField">
+
+    <mat-error *ngFor="let invalidKey of authForm.get(formField).errors?.valueOf() | keyvalue">
+      {{formMask[formField].messages[invalidKey.key]}}
+    </mat-error>
+
+  </mat-form-field>
+
+  <button mat-raised-button type="submit" class="button" [disabled]="authForm.invalid">Submit</button>
+
+<!--  <p>-->
+<!--    {{authForm.errors | json}}-->
+<!--    {{authForm.getRawValue() | json}}-->
+<!--  </p>-->
+
+</form>

@@ -1,0 +1,36 @@
+@use 'sass:map';
+@import "styles";
+
+.nav-bar {
+  display: flex;
+  background: map.get($color, primary);
+  align-items: center;
+  align-content: space-evenly;
+
+  .nav-bar__list {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+
+    &nav-bar__list--item {
+
+      padding: map.get($padding, medium);
+      //color: map.get($color, onPrimary);
+      color: white;
+      align-content: center;
+
+      &nav-bar__list--item:hover {
+        border-bottom: map.get($color, onPrimary) solid map.get($border, thick);
+
+      }
+
+
+    }
+
+  }
+}
+
+.spacer {
+  display: flex;
+  flex-grow: 1;
+}

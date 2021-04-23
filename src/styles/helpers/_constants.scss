@@ -1,7 +1,8 @@
 @import "~@angular/material/theming";
+
 $color: (
-  primary: $mat-indigo,
-  primaryVariant: $mat-amber,
+  primary: #5d9125,
+  primaryVariant: #9ccb51,
   secondary: #bfab21,
   secondaryVariant: #e0c977,
   onSurface: black,
@@ -9,8 +10,8 @@ $color: (
   onPrimary: white,
   onSecondary: white,
   onError: white,
-  error: $mat-red,
-  valid: $mat-green,
+  error: red,
+  valid: green,
   surface: white,
 );
 
@@ -32,10 +33,10 @@ $border: (
   thick: 10px,
 );
 
-$borderRadius: 25px;
+$borderRadius: 130px;
 
 $padding: (
-  little: 5px,
-  medium: 15px,
-  large: 30px,
+  little: 15px,
+  medium: 30px,
+  large: 65px,
 );

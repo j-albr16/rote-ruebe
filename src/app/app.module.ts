@@ -12,6 +12,7 @@ import {JsonInterceptor} from '@core/interceptor/json.interceptor';
 import {AuthModule} from './features/auth/auth.module';
 import {SharedModule} from '@shared/shared.module';
 import {RoutingModule} from '@core/utils/routing/routing.module';
+import {CoreModule} from '@core/core.module';
 
 const httpInterceptorProviders = [
   {provider: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
@@ -31,7 +32,8 @@ const httpInterceptorProviders = [
     SharedModule,
     ReactiveFormsModule,
     RoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    CoreModule
   ],
   providers: [
     AuthService,

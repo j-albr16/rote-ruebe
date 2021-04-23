@@ -1,0 +1,32 @@
+@use "sass:map";
+@import "styles";
+
+.form {
+  display: flex;
+  width: 70%;
+  //min-width: 700px;
+  //max-width: 400px;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  align-self: center;
+  background: map.get($color, secondaryVariant);
+
+
+  .form__field {
+
+    padding: map.get($padding, medium);
+    width: 40%;
+    border-radius: $borderRadius;
+    //background: map.get($color, surface);
+  }
+
+  .button {
+    padding: map.get($padding, little);
+    width: 20%;
+
+  }
+
+}
+
+

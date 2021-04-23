@@ -1,0 +1,13 @@
+@use 'sass:map';
+@import "styles";
+
+
+.form__wrapper {
+  background: map.get($color, secondaryVariant);
+
+  &form {
+  background: map.get($color, secondary);
+}
+}
+
+
