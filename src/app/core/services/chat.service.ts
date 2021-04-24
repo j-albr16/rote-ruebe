@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import User from '@core/models/user';
 import {Observable, Subject} from 'rxjs';
-import Message from '@core/models/user';
+import User from '@core/models/user';
+import Message from '@core/models/Message';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +23,7 @@ export class ChatService {
    */
   getMessages(user: User): {observable: Observable<Message>, subject: Subject<number>} {
     throw Error('getMessages in @core/services/chat.service is not implemented');
-    return{observable: null, subject: null};
+    return;
   }
 
   /**
