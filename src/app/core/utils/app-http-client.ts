@@ -18,11 +18,11 @@ export default class AppHttpClient {
    * Converts Object with Values of any Type to HttpParams Object
    * @param paramsObject object string keys and values of any type
    */
-  static convertParams(paramsObject: { [key: string]: string }): HttpParams {
-    const params = new HttpParams();
+  static convertParams(paramsObject: { [key: string]: any }): HttpParams {
+    let params = new HttpParams();
 
     Object.keys(paramsObject).forEach(key => {
-      params.set(key, paramsObject[key]);
+      params = params.set(key, JSON.stringify(paramsObject[key]));
     });
     return params;
   }
@@ -33,7 +33,7 @@ export default class AppHttpClient {
     });
   }
 
-  get<Res, ReqBody = any>(routeKey: RouterEnums, params: { [key: string]: any } = null, body: ReqBody): Observable<Res> {
+  get<Res, ReqBody = any>(routeKey: RouterEnums, params: { [key: string]: any } = null): Observable<Res> {
     return this.http.get<Res>(routes.get(routeKey), {
       params: AppHttpClient.convertParams(params),
     });
