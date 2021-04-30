@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import User from '@core/models/user';
 import {Observable, Subject} from 'rxjs';
-import Message from '@core/models/user';
+import User from '@core/models/user';
+import Message from '@core/models/Message';
 
 @Injectable({
   providedIn: 'root'
@@ -18,13 +18,12 @@ export class ChatService {
   }
 
   /**
-   * @return Returns an {Observable, Subject} object.
-   * The Observable will emit requested Messages from given User in the order old -> new.
-   * With the Subject you can request more Messages by emitting the wanted number.
+   * @return The Observable will emit requested Messages from given User in the order old -> new.
+   * @return With the Subject you can request more Messages by emitting the wanted number.
    */
   getMessages(user: User): {observable: Observable<Message>, subject: Subject<number>} {
     throw Error('getMessages in @core/services/chat.service is not implemented');
-    return{observable: null, subject: null};
+    return;
   }
 
   /**
@@ -36,8 +35,8 @@ export class ChatService {
   }
 
   /**
-   * @return Returns a {User, number} Object that describes the number of unread Messages in the chat with assosiated user.
-   * After the initial emit it will emit new UnreadMessages until unsubscribed
+   * @return Returns a {User, number} Object that describes the number of unread Messages in the chat with associated user.
+   * @return After the initial emit it will emit new UnreadMessages until unsubscribed
    */
   getUnreadMessages(): Observable<{user: User, amount: number}>{
     throw Error('getUnreadMessages in @core/services/chat.service is not implemented');

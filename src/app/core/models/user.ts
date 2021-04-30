@@ -5,7 +5,7 @@ interface UserAttributes {
   id: string;
   userName: string;
   description?: string;
-  email: string;
+  email?: string;
   createdAt: Date;
   image?: Image;
   loginToken?: string;

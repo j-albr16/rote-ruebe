@@ -20,6 +20,10 @@ export class AuthService {
   constructor(private http: HttpClient) {
   }
 
+  get userId(): string {
+    return  this.userId;
+  }
+
   get isAuth(): boolean {
     return !!this.user?.loginToken;
   }
