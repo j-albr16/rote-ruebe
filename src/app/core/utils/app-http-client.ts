@@ -1,20 +1,17 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {RouterEnums, routes} from 'rote-ruebe-types';
+import {Injectable} from '@angular/core';
 
 
-export default class AppHttpClient extends HttpClient {
+export function appHttpClientCreator(http: HttpClient): AppHttpClient {
+  return new AppHttpClient(http);
+}
 
-  static post<Res, ReqBody = any>(routeKey: RouterEnums, params: { [key: string]: any }, body: ReqBody): Observable<Res> {
-    return HttpClient.prototype.post<Res>(routes.get(routeKey), body, {
-      params: this.convertParams(params),
-    });
-  }
+@Injectable()
+export default class AppHttpClient {
 
-  static get<Res, ReqBody = any>(routeKey: RouterEnums, params: { [key: string]: any }, body: ReqBody): Observable<Res> {
-    return HttpClient.prototype.get<Res>(routes.get(routeKey), {
-      params: this.convertParams(params),
-    });
+  constructor(public http: HttpClient) {
   }
 
   /**
@@ -27,9 +24,21 @@ export default class AppHttpClient extends HttpClient {
     Object.keys(paramsObject).forEach(key => {
       params.set(key, paramsObject[key]);
     });
-
     return params;
-
   }
+
+  post<Res, ReqBody = any>(routeKey: RouterEnums, body: ReqBody, params: { [key: string]: any } = null): Observable<Res> {
+    return this.http.post<Res>(routes.get(routeKey), body, {
+      params: AppHttpClient.convertParams(params),
+    });
+  }
+
+  get<Res, ReqBody = any>(routeKey: RouterEnums, params: { [key: string]: any } = null, body: ReqBody): Observable<Res> {
+    return this.http.get<Res>(routes.get(routeKey), {
+      params: AppHttpClient.convertParams(params),
+    });
+  }
+
+
 }
 

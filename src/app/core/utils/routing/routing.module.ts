@@ -5,6 +5,7 @@ import {AppComponent} from '../../../app.component';
 import {AuthGuard} from '@core/guards/auth.guard';
 import {AuthPageComponent} from '../../../features/auth/components/auth-page/auth-page.component';
 import ExchangeObject from '@core/models/exchange-object';
+import AppHttpClient from '@core/utils/app-http-client';
 
 const routes: Routes = [
   {path: 'dashboard', component: ExchangeObject},
@@ -21,7 +22,7 @@ const routes: Routes = [
   declarations: [],
   imports: [
     RouterModule.forRoot(routes),
-    CommonModule
+    CommonModule,
   ],
   exports: [
     RouterModule,

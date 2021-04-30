@@ -25,17 +25,18 @@ import {AuthService} from '@core/services/auth.service';
 export class UserService {
   userMap = new Map();
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService) {
+  }
 
   /**
    * @return an Observable that emits the according User model for the given userId.
    */
-  getUser(userId: string): Observable<User>{
-    if (this.userMap.get(userId) != null){
+  getUser(userId: string): Observable<User> {
+    if (this.userMap.get(userId) != null) {
       return new Observable<User>(sub => {
-      sub.next(this.userMap.get(userId));
-      sub.complete();
-    });
+        sub.next(this.userMap.get(userId));
+        sub.complete();
+      });
     }
 
     return this.fetchUser(userId).pipe(
@@ -47,7 +48,7 @@ export class UserService {
    * @return an Observable that will emit requested User matching given UserFilter in the order defined by the UserFilter.
    * @return the Subject that lets you request more Users by emitting the wanted number.
    */
-  getUsers(filter: UserFilter): {observable: Observable<User>, subject: Subject<number>}{
+  getUsers(filter: UserFilter): { observable: Observable<User>, subject: Subject<number> } {
     const userSender = new MemorySubject<User>();
     const amountSender = new Subject<number>();
 
@@ -66,14 +67,14 @@ export class UserService {
   /**
    * @return User model of the device User
    */
-  getMyUser(): Observable<User>{
+  getMyUser(): Observable<User> {
     return this.getUser(this.authService.userId);
   }
 
   /**
    * @return Observable either emits true and completes when the server accepts the change or errors
    */
-  changeMyUser(changedUser: ChangeUserRequest): Observable<boolean>{
+  changeMyUser(changedUser: ChangeUserRequest): Observable<boolean> {
     const request: ChangeUserRequest = changedUser;
     return this.http.post(routes.get(UserRoutes.ChangeUser), request).pipe(
       map(value => true),
@@ -84,15 +85,15 @@ export class UserService {
    * Fetches the User model of given user weather or not it is already cached client side.
    *  @return Observable either emits true and completes when the User is fetched or errors
    */
-  refreshUser(userId: string): Observable<boolean>{
+  refreshUser(userId: string): Observable<boolean> {
     this.userMap.delete(userId);
 
     return this.getUser(userId).pipe(
       map(value => true),
-    )
+    );
   }
 
-  private fetchUserList(userFilter: UserFilter, amount: number, furthestUserId?: string): Observable<User>{
+  private fetchUserList(userFilter: UserFilter, amount: number, furthestUserId?: string): Observable<User> {
     const request: UserListRequest = {
       amount,
       furthestUserId,
@@ -109,13 +110,13 @@ export class UserService {
             const userResponse = valueEntry as UserResponse;
             return this.responseToUser(userResponse);
           })
-        )
+        );
       })
     );
   }
 
 
-  private fetchUser(userId: string): Observable<User>{
+  private fetchUser(userId: string): Observable<User> {
     return this.http.get(routes.get(UserRoutes.FetchUser), {
       params: {userId}
     }).pipe(
@@ -123,10 +124,10 @@ export class UserService {
         const res: UserResponse = value as UserResponse;
         return this.responseToUser(res);
       })
-    )
+    );
   }
 
-  private responseToUser(response: UserResponse): User{
+  private responseToUser(response: UserResponse): User {
     return new User({
       id: response.id,
       createdAt: response.createdAt,
@@ -137,9 +138,9 @@ export class UserService {
     });
   }
 
-  private getParams(object: any): HttpParams{
+  private getParams(object: any): HttpParams {
     let httpParams = new HttpParams();
-    Object.keys(object).forEach( (key) => {
+    Object.keys(object).forEach((key) => {
       httpParams = httpParams.append(key, JSON.stringify(object[key]));
     });
     return httpParams;

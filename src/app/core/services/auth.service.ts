@@ -4,12 +4,11 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {
-  ErrorList,
-  LogInUserData,
-  RequestResetPasswordUserData,
-  ResetPasswordUserData, routes,
-  SignInUserData
+  AuthRoutes,
+  ErrorList, LogInRequest, LogInResponse, RequestResetPasswordRequest, ResetPasswordRequest,
+  routes, SignUpRequest,
 } from 'rote-ruebe-types';
+import AppHttpClient from '@core/utils/app-http-client';
 
 @Injectable({
   providedIn: 'root'
@@ -17,11 +16,11 @@ import {
 export class AuthService {
   private user: User;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: AppHttpClient) {
   }
 
   get userId(): string {
-    return  this.userId;
+    return this.user.id;
   }
 
   get isAuth(): boolean {
@@ -32,8 +31,8 @@ export class AuthService {
     return this.user.id + ':' + this.user.loginToken;
   }
 
-  public logIn(userData: LogInUserData): Observable<ErrorList | null> {
-    return this.http.post<any>('/log-in', userData).pipe(
+  public logIn(userData: LogInRequest): Observable<void | string> {
+    return this.http.post<void | string>(AuthRoutes.LogIn, userData).pipe(
       tap(data => {
         if (data.errorList) {
           return data.errorList;
@@ -43,7 +42,7 @@ export class AuthService {
     );
   }
 
-  public singUp(user: SignInUserData): Observable<ErrorList | null> {
+  public singUp(user: SignUpRequest): Observable<ErrorList | null> {
     return this.http.post<any>('/sign-up', user).pipe(
       tap(data => {
         if (data.errorList) return data.errorList;
@@ -51,7 +50,7 @@ export class AuthService {
     );
   }
 
-  public requestResetPassword(user: RequestResetPasswordUserData): Observable<ErrorList | null> {
+  public requestResetPassword(user: RequestResetPasswordRequest): Observable<ErrorList | null> {
     return this.http.post<any>(routes.get(AuthRoutes.RequestResetPassword), user).pipe(
       tap(data => {
         if (data.errorList) return data.errorList;
@@ -59,7 +58,7 @@ export class AuthService {
     );
   }
 
-  public resetPassword(user: ResetPasswordUserData): Observable<ErrorList | null> {
+  public resetPassword(user: ResetPasswordRequest): Observable<ErrorList | null> {
     return this.http.post<any>('/reset-password', user).pipe(
       tap(data => {
         if (data.errorList) return data.errorList;

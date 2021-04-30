@@ -4,7 +4,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppComponent} from './app.component';
 import {RouterModule, Routes} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {AuthService} from '@core/services/index';
 import {AuthInterceptor} from '@core/interceptor/auth.interceptor';
 import {ErrorInterceptor} from '@core/interceptor/error.interceptor';
@@ -13,6 +13,7 @@ import {AuthModule} from './features/auth/auth.module';
 import {SharedModule} from '@shared/shared.module';
 import {RoutingModule} from '@core/utils/routing/routing.module';
 import {CoreModule} from '@core/core.module';
+import AppHttpClient, {appHttpClientCreator} from '@core/utils/app-http-client';
 
 const httpInterceptorProviders = [
   {provider: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
@@ -33,11 +34,12 @@ const httpInterceptorProviders = [
     ReactiveFormsModule,
     RoutingModule,
     HttpClientModule,
-    CoreModule
+    CoreModule,
   ],
   providers: [
     AuthService,
     httpInterceptorProviders,
+    {provide: AppHttpClient, useFactory: appHttpClientCreator, deps: [HttpClient]},
   ],
   bootstrap: [AppComponent],
 })
