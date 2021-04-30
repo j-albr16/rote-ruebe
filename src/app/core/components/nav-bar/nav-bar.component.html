@@ -2,20 +2,20 @@
 
   <ul class="nav-bar__list">
 
-    <li class="nav-bar__list--item" routerLink="/exchange-objects">
+    <li class="nav-bar__list--item" appIsSelected routerLink="/exchange-objects">
       Exchange Objects
     </li>
-    <li class="nav-bar__list--item" routerLink="/dashboard">
+    <li class="nav-bar__list--item" appIsSelected routerLink="/dashboard">
       Dashboard
     </li>
-    <li class="nav-bar__list--item" routerLink="/social">
+    <li class="nav-bar__list--item" appIsSelected routerLink="/social">
       Social
     </li>
 
     <li class="spacer">
     </li>
 
-    <app-profile-menu class="nav-bar__list--profile">
+    <app-profile-menu class="nav-bar__list--profile gab">
       Profile Thing
     </app-profile-menu>
 
@@ -23,4 +23,4 @@
 
 </nav>
 
-<router-outlet></router-outlet>
+<router-outlet ftFlexFill></router-outlet>

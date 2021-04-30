@@ -3,30 +3,38 @@
 
 .nav-bar {
   display: flex;
-  background: map.get($color, primary);
-  align-items: center;
-  align-content: space-evenly;
+  //background: #5d9125;
+  background: radial-gradient(circle, map.get($color, secondary) 17%, map.get($color, primary) 89%);
 
   .nav-bar__list {
+    flex: 1 1 auto;
     display: flex;
     flex-direction: row;
+
     list-style: none;
+    width: 100%;
+    margin: 0;
+    padding: 10px;
 
-    &nav-bar__list--item {
+    align-items: center;
+    align-content: space-evenly;
 
-      padding: map.get($padding, medium);
-      //color: map.get($color, onPrimary);
-      color: white;
-      align-content: center;
+    color: map.get($color, onPrimary);
 
-      &nav-bar__list--item:hover {
-        border-bottom: map.get($color, onPrimary) solid map.get($border, thick);
-
+    .nav-bar__list--item {
+      &:hover {
+        background-color: map.get($color, primaryVariant);
       }
+
+      &.selected {
+        background-color: map.get($color, primaryVariant);
+      }
+
+      display: block;
+      padding: 10px 20px;
 
 
     }
-
   }
 }
 

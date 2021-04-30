@@ -9,20 +9,22 @@ import {AuthInterceptor} from '@core/interceptor/auth.interceptor';
 import {ErrorInterceptor} from '@core/interceptor/error.interceptor';
 import {JsonInterceptor} from '@core/interceptor/json.interceptor';
 import {AuthModule} from '../features/auth/auth.module';
+import { IsSelectedDirective } from './directives/is-selected.directive';
 
 
 
 
 @NgModule({
-  declarations: [],
+  declarations: [IsSelectedDirective],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  exports: [
-    RouterModule,
-  ],
+    exports: [
+        RouterModule,
+        IsSelectedDirective,
+    ],
 })
 export class SharedModule {
 }

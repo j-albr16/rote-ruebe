@@ -3,7 +3,13 @@ import User from '@core/models/user';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {ErrorList, LogInUserData, RequestResetPasswordUserData, ResetPasswordUserData, SignInUserData} from '@shared/types/auth';
+import {
+  ErrorList,
+  LogInUserData,
+  RequestResetPasswordUserData,
+  ResetPasswordUserData, routes,
+  SignInUserData
+} from 'rote-ruebe-types';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +28,6 @@ export class AuthService {
     return this.user.id + ':' + this.user.loginToken;
   }
 
-  // tslint:disable-next-line:typedef
   public logIn(userData: LogInUserData): Observable<ErrorList | null> {
     return this.http.post<any>('/log-in', userData).pipe(
       tap(data => {
@@ -43,7 +48,7 @@ export class AuthService {
   }
 
   public requestResetPassword(user: RequestResetPasswordUserData): Observable<ErrorList | null> {
-    return this.http.post<any>('/request-reset-password', user).pipe(
+    return this.http.post<any>(routes.get(AuthRoutes.RequestResetPassword), user).pipe(
       tap(data => {
         if (data.errorList) return data.errorList;
       })

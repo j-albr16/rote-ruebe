@@ -4,14 +4,16 @@ import {RouterModule, Routes} from '@angular/router';
 import {AppComponent} from '../../../app.component';
 import {AuthGuard} from '@core/guards/auth.guard';
 import {AuthPageComponent} from '../../../features/auth/components/auth-page/auth-page.component';
+import ExchangeObject from '@core/models/exchange-object';
 
 const routes: Routes = [
-  {path: 'dashboard', component: AppComponent},
-  {path: 'social', component: AppComponent},
-  {path: 'exchange-objects', component: AppComponent},
+  {path: 'dashboard', component: ExchangeObject},
+  {path: 'social', component: ExchangeObject},
+  {path: 'exchange-objects', component: ExchangeObject},
   {path: 'auth', component: AuthPageComponent},
-  {path: '', component: AppComponent, canActivate: [AuthGuard]},
+  {path: '', component: ExchangeObject, canActivate: [AuthGuard]},
   {path: '**', redirectTo: ''},
+  {path: ''}
 ];
 
 
