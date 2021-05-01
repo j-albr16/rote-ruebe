@@ -14,6 +14,7 @@ import {SharedModule} from '@shared/shared.module';
 import {RoutingModule} from '@core/utils/routing/routing.module';
 import {CoreModule} from '@core/core.module';
 import AppHttpClient, {appHttpClientCreator} from '@core/utils/app-http-client';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const httpInterceptorProviders = [
   {provider: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
@@ -35,6 +36,7 @@ const httpInterceptorProviders = [
     RoutingModule,
     HttpClientModule,
     CoreModule,
+    BrowserAnimationsModule,
   ],
   providers: [
     AuthService,

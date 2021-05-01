@@ -16,7 +16,6 @@ type Optional<T> = {
 }
 
 
-
 interface UserMethods {
   toJson(): string;
 }
@@ -47,10 +46,10 @@ export default class User implements UserAttributes {
     this.loginToken = constructor.loginToken;
   }
 
-  public static fromJson(json: UserAttributes): User {
+  public static fromJson(json: { [key: string]: any }): User {
     const object = {...json};
     object.createdAt = new Date(object.createdAt);
-    return new User(object);
+    return new User(object as UserAttributes);
   }
 
   public toJson(): string {

@@ -2,14 +2,17 @@
 
   <ul class="nav-bar__list">
 
-    <li class="nav-bar__list--item" appIsSelected routerLink="/exchange-objects">
+    <li class="nav-bar__list--item" routerLink="/exchange-objects" routerLinkActive="router-link-active">
       Exchange Objects
     </li>
-    <li class="nav-bar__list--item" appIsSelected routerLink="/dashboard">
+    <li class="nav-bar__list--item" routerLink="/dashboard" routerLinkActive="router-link-active">
       Dashboard
     </li>
-    <li class="nav-bar__list--item" appIsSelected routerLink="/social">
+    <li class="nav-bar__list--item" routerLink="/social" routerLinkActive="router-link-active">
       Social
+    </li>
+    <li class="nav-bar__list--item" routerLink="/auth" routerLinkActive="router-link-active">
+      Auth
     </li>
 
     <li class="spacer">
@@ -23,4 +26,4 @@
 
 </nav>
 
-<router-outlet ftFlexFill></router-outlet>
+<router-outlet ftflexfill=""></router-outlet>

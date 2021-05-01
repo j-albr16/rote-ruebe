@@ -8,9 +8,9 @@ import ExchangeObject from '@core/models/exchange-object';
 import AppHttpClient from '@core/utils/app-http-client';
 
 const routes: Routes = [
-  {path: 'dashboard', component: ExchangeObject},
-  {path: 'social', component: ExchangeObject},
-  {path: 'exchange-objects', component: ExchangeObject},
+  {path: 'dashboard', component: AuthPageComponent},
+  {path: 'social', component: AuthPageComponent},
+  {path: 'exchange-objects', component: AuthPageComponent},
   {path: 'auth', component: AuthPageComponent},
   {path: '', component: ExchangeObject, canActivate: [AuthGuard]},
   {path: '**', redirectTo: ''},

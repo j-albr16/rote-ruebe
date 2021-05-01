@@ -2,6 +2,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {RouterEnums, routes} from 'rote-ruebe-types';
 import {Injectable} from '@angular/core';
+import {catchError} from 'rxjs/operators';
 
 
 export function appHttpClientCreator(http: HttpClient): AppHttpClient {
@@ -29,7 +30,7 @@ export default class AppHttpClient {
 
   post<Res, ReqBody = any>(routeKey: RouterEnums, body: ReqBody, params: { [key: string]: any } = null): Observable<Res> {
     return this.http.post<Res>(routes.get(routeKey), body, {
-      params: AppHttpClient.convertParams(params),
+      params: params ? AppHttpClient.convertParams(params) : null,
     });
   }
 

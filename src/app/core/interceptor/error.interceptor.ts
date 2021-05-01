@@ -3,10 +3,11 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor
+  HttpInterceptor, HttpResponse
 } from '@angular/common/http';
 import {Observable, of, throwError} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
+import {ErrorBody, ResBody} from 'rote-ruebe-types';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -14,17 +15,26 @@ export class ErrorInterceptor implements HttpInterceptor {
   constructor() {
   }
 
-  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  throwErrorBody(message: string, errorList = null): ErrorBody {
+    return {
+      errorMessage: message,
+      errorList,
+    };
+  }
+
+  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpResponse<ResBody>> {
     return next.handle(req).pipe(
-      catchError(err => {
-        console.log(err);
-        return of(err);
+      catchError((err) => {
+        return throwError(this.throwErrorBody(`HttpError:\n${err}`));
       }),
-      tap((body: any) => {
-        if (!body.b_valid) {
-          return throwError(body.message);
+      tap((event: HttpResponse<ResBody>) => {
+        const body = event.body;
+        if (!body) {
+          return throwError(this.throwErrorBody(`Error: No Http Body`));
         }
-        if (body.data) return body.data;
+        if (!body.b_valid) {
+          return of(body.data);
+        }
         return body;
       })
     );

@@ -1,4 +1,4 @@
-@use 'sass:map';
+@use "sass:map";
 @import "styles";
 
 .nav-bar {
@@ -26,7 +26,7 @@
         background-color: map.get($color, primaryVariant);
       }
 
-      &.selected {
+      &.router-link-active {
         background-color: map.get($color, primaryVariant);
       }
 

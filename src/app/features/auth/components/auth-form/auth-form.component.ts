@@ -3,6 +3,7 @@ import {AbstractControl, FormBuilder, FormControl, FormGroup, FormGroupDirective
 import {AuthService} from '@core/services';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {Observable} from 'rxjs';
+import {ErrorList} from 'rote-ruebe-types';
 
 interface FormMaskData {
   hint: string,
@@ -124,15 +125,20 @@ export class AuthFormComponent implements OnInit {
     }
   };
 
+  /**
+   * Getter for Controls Config. Generates Controls Config for Form dependant on Data and AuthState
+   */
   get controlsConfig(): any {
     const controlsConfig: any = {};
     this.getFormFieldList().forEach(formField => {
       controlsConfig[formField] = this.formMask[formField].validators;
     });
-    console.log(controlsConfig);
     return controlsConfig;
   }
 
+  /**
+   * Getter to Retrieve Submit Data from FormData
+   */
   get submitData(): any {
     const submitData = {};
     const formData = this.authForm.getRawValue();
@@ -142,12 +148,19 @@ export class AuthFormComponent implements OnInit {
     return submitData;
   }
 
+  /**
+   * Getter that checks whether Confirm Password and Password are Required. Is Dependant on AuthState
+   */
   get b_passwordConfirm(): boolean {
     const formContainsField = (field: string): boolean =>
       this.getFormFieldList().includes(field);
     return formContainsField('confirmPassword') && formContainsField('password');
   }
 
+  /**
+   * Getter for Inout Type ( Password, Email ... )
+   * @param formField name of FormField
+   */
   getInputType(formField: string): string {
     if (formField === 'email') {
       return 'email';
@@ -158,6 +171,10 @@ export class AuthFormComponent implements OnInit {
     return 'text';
   }
 
+  /**
+   * Generate Form on Component init. Generate Dynamic Form dependant on const Data an AuthState
+   * @private
+   */
   private createForm(): void {
     this.authForm =
       this.formBuilder.group(this.controlsConfig, {validators: this.b_passwordConfirm ? this.passwordMatchValidator : null});
@@ -184,6 +201,9 @@ export class AuthFormComponent implements OnInit {
     }
   }
 
+  /**
+   * Retrieving Form Field Data depending on Auth State
+   */
   getFormFieldList(): string[] {
     return this.authStateMask[AuthState[this.authState]];
   }
@@ -196,19 +216,25 @@ export class AuthFormComponent implements OnInit {
     this.createForm();
   }
 
-  private handleServerValidationError(errorList: string[]): void {
+  private handleServerValidationError(errorList: ErrorList | null): void {
     this.errorList = errorList;
   }
 
+  /**
+   * Custom Cross Field Validator. Checks whether Password Matches Confirm Password
+   * @param control Abstract Control is parsed into Validator by Default
+   */
   public passwordMatchValidator = (control: AbstractControl): { [key: string]: any } | null => {
     const passwordControl: AbstractControl = control.get('password');
     const confirmPasswordControl: AbstractControl = control.get('confirmPassword');
+
     if (passwordControl.value !== confirmPasswordControl.value) {
       const error = {passwordMatch: true};
       passwordControl.setErrors(error);
       confirmPasswordControl.setErrors(error);
       return error;
     }
+
     passwordControl.setErrors(null);
     confirmPasswordControl.setErrors(null);
     return null;

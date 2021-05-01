@@ -1,5 +1,6 @@
 @use "sass:map";
-@import "~@angular/material/theming", "helpers/_constants";
+@use "~@angular/material/theming";
+@use "helpers/_constants";
 
 
 @include mat-core();

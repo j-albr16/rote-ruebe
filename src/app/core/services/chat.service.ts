@@ -1,18 +1,20 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
 import User from '@core/models/user';
-import Message from '@core/models/Message';
+import Message from '@core/models/message';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
 
-  constructor() { }
+  constructor() {
+  }
+
   /**
    * @return Returns an Observable that emits the last Message of each given user in userList as a {User, Message} Object
    */
-  getLatestMessage(userList: User[]): Observable<{user: User, message: Message}>{
+  getLatestMessage(userList: User[]): Observable<{ user: User, message: Message }> {
     throw Error('getLatestMessage in @core/services/chat.service is not implemented');
     return;
   }
@@ -21,7 +23,7 @@ export class ChatService {
    * @return The Observable will emit requested Messages from given User in the order old -> new.
    * @return With the Subject you can request more Messages by emitting the wanted number.
    */
-  getMessages(user: User): {observable: Observable<Message>, subject: Subject<number>} {
+  getMessages(user: User): { observable: Observable<Message>, subject: Subject<number> } {
     throw Error('getMessages in @core/services/chat.service is not implemented');
     return;
   }
@@ -29,7 +31,7 @@ export class ChatService {
   /**
    * @return The returned Observable will emit new incoming Messages until unsubscribed
    */
-  getNewMessages(): Observable<{ user: User, message: Message}>{
+  getNewMessages(): Observable<{ user: User, message: Message }> {
     throw Error('getNewMessages in @core/services/chat.service is not implemented');
     return;
   }
@@ -38,7 +40,7 @@ export class ChatService {
    * @return Returns a {User, number} Object that describes the number of unread Messages in the chat with associated user.
    * @return After the initial emit it will emit new UnreadMessages until unsubscribed
    */
-  getUnreadMessages(): Observable<{user: User, amount: number}>{
+  getUnreadMessages(): Observable<{ user: User, amount: number }> {
     throw Error('getUnreadMessages in @core/services/chat.service is not implemented');
     return;
   }
@@ -47,7 +49,7 @@ export class ChatService {
    * Marks every Message the device User has with the given User as read.
    * Will instantly mark any new Message with given User as read as long as given Observable is not completed.
    */
-  markMessagesAsRead(userObs: Observable<User>): void{
+  markMessagesAsRead(userObs: Observable<User>): void {
     throw Error('markMessagesAsRead in @core/services/chat.service is not implemented');
     return;
   }
@@ -56,7 +58,7 @@ export class ChatService {
    * Sends a chat message to the Server
    * @return the Observable will emit true if the Message is send successfully.
    */
-  sendMessage(message: Message): Observable<boolean>{
+  sendMessage(message: Message): Observable<boolean> {
     throw Error('sendMessage in @core/services/chat.service is not implemented');
     return;
   }
