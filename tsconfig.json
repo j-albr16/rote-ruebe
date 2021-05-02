@@ -16,6 +16,7 @@
     },
     "outDir": "./dist/out-tsc",
     "rootDir": "./src/",
+//    "rootDirs": ["src", "e2e"],
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,

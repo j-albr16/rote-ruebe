@@ -1,4 +1,5 @@
 import { browser, logging } from 'protractor';
+// @ts-ignore
 import { AppPage } from './app.po';
 
 describe('workspace-project App', () => {
