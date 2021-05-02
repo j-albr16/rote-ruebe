@@ -3,28 +3,26 @@
 
 .form {
   display: flex;
-  width: 70%;
-  //min-width: 700px;
-  //max-width: 400px;
+  width: 100%;
   flex-direction: column;
+  justify-content: space-evenly;
   align-items: center;
-  position: relative;
-  align-self: center;
   background: map.get($color, secondaryVariant);
 
 
   .form__field {
 
+    display: block;
     padding: map.get($padding, medium);
-    width: 40%;
+    width: 70%;
     border-radius: $borderRadius;
-    //background: map.get($color, surface);
   }
 
   .button {
+    display: block;
     padding: map.get($padding, little);
     width: 20%;
-
+    border-radius: $borderRadius;
   }
 
 }
