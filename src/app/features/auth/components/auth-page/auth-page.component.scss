@@ -3,11 +3,24 @@
 
 
 .form__wrapper {
-  background: map.get($color, secondaryVariant);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: yellowgreen;
 
-  &form {
-  background: map.get($color, secondary);
-}
+  //align-content: center;
+
+  .form {
+    display: flex;
+    justify-content: center;
+    width: 70%;
+    height: 70%;
+    //background: map.get($color, secondary);
+    //width: 70%;
+  }
 }
 
 
