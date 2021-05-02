@@ -30,14 +30,14 @@ export default class Request implements RequestAttributes, RequestMethods{
   public exchangeObject?: ExchangeObject;
   public readonly createdAt!: Date;
 
-  constructor(constructor: RequestAttributes) {
-    this.id = constructor.id;
-    this.amount = constructor.amount;
-    this.text = constructor.text;
-    this.sender = constructor.sender;
-    this.receiver = constructor.receiver;
-    this.exchangeObject = constructor.exchangeObject;
-    this.createdAt = constructor.createdAt;
+  constructor(attributes: RequestAttributes) {
+    this.id = attributes.id;
+    this.amount = attributes.amount;
+    this.text = attributes.text;
+    this.sender = attributes.sender;
+    this.receiver = attributes.receiver;
+    this.exchangeObject = attributes.exchangeObject;
+    this.createdAt = attributes.createdAt;
   }
 
   public static fromJson(json: string): Request {

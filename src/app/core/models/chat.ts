@@ -14,9 +14,9 @@ export default class Chat implements ChatAttributes, ChatMethods {
   public readonly userList!: User[];
   public readonly messageList!: Message[];
 
-  constructor(constructor: ChatAttributes) {
-    this.userList = constructor.userList;
-    this.messageList = constructor.messageList;
+  constructor(attributes: ChatAttributes) {
+    this.userList = attributes.userList;
+    this.messageList = attributes.messageList;
   }
 
   public addMessage(message: Message): void {
