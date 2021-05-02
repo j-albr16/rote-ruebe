@@ -1,5 +1,6 @@
 import {staticImplements} from './model-helper';
 import type ExchangeObject from './exchange-object';
+import type User from './user';
 
 interface CommentAttributes {
   id: string;
