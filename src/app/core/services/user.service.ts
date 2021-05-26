@@ -104,8 +104,10 @@ export class UserService {
       params: this.getParams(request),
     }).pipe(
       mergeMap(value => {
-        const res = value as UserListResponse;
-        return from(res.userList).pipe(
+        // const res = value as UserListResponse;
+        const res = value as UserListResponse[];
+        return from(res).pipe(
+          // return from(res.userList).pipe(
           map(valueEntry => {
             const userResponse = valueEntry as UserResponse;
             return this.responseToUser(userResponse);

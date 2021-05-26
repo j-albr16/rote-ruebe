@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
 import {
-  HttpRequest,
-  HttpHandler,
   HttpEvent,
-  HttpInterceptor, HttpResponse
+  HttpEventType,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
 } from '@angular/common/http';
-import {Observable, of, throwError} from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
+import {Observable, pipe, throwError, UnaryFunction} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 import {ErrorBody, ResBody} from 'rote-ruebe-types';
 
 @Injectable()
@@ -15,28 +16,43 @@ export class ErrorInterceptor implements HttpInterceptor {
   constructor() {
   }
 
-  throwErrorBody(message: string, errorList = null): ErrorBody {
-    return {
-      errorMessage: message,
-      errorList,
-    };
+  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<ResBody>> {
+    return next.handle(req).pipe(
+      this.handlingResponse(),
+      catchError((err) => {
+        console.log('Caught Error');
+        return throwError(`HttpError:\n${err.message}`);
+      }),
+    );
+    ;
   }
 
-  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpResponse<ResBody>> {
-    return next.handle(req).pipe(
-      catchError((err) => {
-        return throwError(this.throwErrorBody(`HttpError:\n${err}`));
+  handlingResponse(): UnaryFunction<Observable<HttpEvent<ResBody>>, Observable<HttpEvent<any>>> {
+    return pipe(
+      map(event => {
+        if (event.type === HttpEventType.Response) {
+          // Extracting Body
+          const body = event.body;
+
+          // Error if there is no Res with Body
+          if (!body) {
+            throw new Error(`Error: No Http Body`);
+          }
+
+          // Check if Server Request was Valid
+          if (!body.b_valid) {
+            throw Error(body.message);
+          }
+
+          if (!body.data) {
+            return null;
+          }
+
+          return event.clone({body: body.data});
+        }
+        return event;
       }),
-      tap((event: HttpResponse<ResBody>) => {
-        const body = event.body;
-        if (!body) {
-          return throwError(this.throwErrorBody(`Error: No Http Body`));
-        }
-        if (!body.b_valid) {
-          return of(body.data);
-        }
-        return body;
-      })
     );
   }
+
 }

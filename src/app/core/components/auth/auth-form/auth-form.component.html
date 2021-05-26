@@ -1,0 +1,34 @@
+<form [formGroup]="authForm" (ngSubmit)="submit()" #f="ngForm" class="form">
+
+  <ng-container *ngIf="errorMessage != null">
+    <p>
+      {{errorMessage}}
+    </p>
+  </ng-container>
+
+  <!--                  Iterating through Each Form Field for Current Auth State-->
+  <mat-form-field *ngFor="let formField of formFieldList"
+                  appearance="fill" [floatLabel]="floatLabelControl.value"
+                  [hideRequiredMarker]="hideRequiredControl.value" class="form__field">
+
+    <!--    Creating A Label for Form Field-->
+    <mat-label>
+      {{formField}}
+    </mat-label>
+
+    <!--    Input with Hint and Input Type-->
+    <input matInput placeholder="{{this.dynamicFormData.get(formField).hint}}"
+           type="{{this.dynamicFormData.get(formField).inputType}}" [formControlName]="formField"
+           [errorStateMatcher]="matcher">
+
+    <!--    Displaying Errors if ErrorStateMatcher Triggers-->
+    <mat-error *ngFor="let invalidKey of authForm.get(formField).errors?.valueOf() | keyvalue">
+      {{this.dynamicFormData.get(formField).messages[invalidKey.key]}}
+    </mat-error>
+
+  </mat-form-field>
+
+  <!--  Submit Button-->
+  <button mat-raised-button type="submit" class="button" [disabled]="authForm.invalid">Submit</button>
+
+</form>

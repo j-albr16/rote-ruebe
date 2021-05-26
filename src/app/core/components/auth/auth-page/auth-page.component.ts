@@ -9,16 +9,26 @@ import {AuthState} from '../auth-form/auth-form.component';
 })
 export class AuthPageComponent implements OnInit {
   public authState;
-  constructor(private route: ActivatedRoute) { }
-  setAuthState(): void {
-    console.log('Setting Auth State');
+
+  constructor(private route: ActivatedRoute) {
+  }
+
+  setAuthState(authState: keyof typeof AuthState = null): void {
+    if (authState) {
+      this.authState = AuthState[authState];
+      return null;
+    }
     this.route.paramMap.subscribe(params => {
       this.authState = AuthState[params.get('authState')] ?? AuthState.LogIn;
     });
   }
 
   ngOnInit(): void {
-    this.setAuthState()
+    this.setAuthState();
+  }
+
+  isAuthState(authState: keyof typeof AuthState): boolean {
+    return AuthState[authState] === this.authState;
   }
 
 }

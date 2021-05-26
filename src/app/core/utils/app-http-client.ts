@@ -1,8 +1,8 @@
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams, HttpRequest, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {RouterEnums, routes} from 'rote-ruebe-types';
+import {ChatRoutes, RouterEnums, table} from 'rote-ruebe-types';
 import {Injectable} from '@angular/core';
-import {catchError} from 'rxjs/operators';
+import {URLArgs, URLType} from 'rote-ruebe-types/build/utils/shared';
 
 
 export function appHttpClientCreator(http: HttpClient): AppHttpClient {
@@ -28,18 +28,52 @@ export default class AppHttpClient {
     return params;
   }
 
-  post<Res, ReqBody = any>(routeKey: RouterEnums, body: ReqBody, params: { [key: string]: any } = null): Observable<Res> {
-    return this.http.post<Res>(routes.get(routeKey), body, {
-      params: params ? AppHttpClient.convertParams(params) : null,
+  static generateQueries(queries: { [key: string]: URLType }): string {
+    // Following Schema:
+    //   https//:HOST:PORT/PATH/...params?query=data&query2=data2...;
+    // Min Path
+    let queryString = '';
+
+    // Adding Queries to Path
+    // Order is Insignificant
+    if (queries) {
+      const queryEntryList = Object.entries(queries);
+      if (queryEntryList.length > 0) {
+        queryString += '?';
+        queryEntryList.map(q => `${q[0]}=${q[1]}`);
+        queryString += queryEntryList.join('&');
+      }
+    }
+    return queryString;
+  }
+
+  request<Res, Req extends URLArgs = null>(routeKey: RouterEnums, data: Req, b_progress = false): Observable<Res> {
+    let url: string = routeKey;
+    if (data.queries) {
+      url += AppHttpClient.generateQueries(data.queries);
+      delete data.queries;
+    }
+    return this.http.request<Res>(table.get(routeKey).httpType , url, {
+      reportProgress: b_progress,
+      body: data,
     });
   }
 
-  get<Res, ReqBody = any>(routeKey: RouterEnums, params: { [key: string]: any } = null): Observable<Res> {
-    return this.http.get<Res>(routes.get(routeKey), {
-      params: AppHttpClient.convertParams(params),
+  post<Res, ReqBody = any>(routeKey: RouterEnums, body: ReqBody, queries: { [key: string]: any } = null, b_progress = false)
+    : Observable<Res> {
+    const url = `${routeKey}${AppHttpClient.generateQueries(queries)}`;
+    return this.http.post<Res>(url, body, {
+      // params: params ? AppHttpClient.convertParams(params) : null,
+      reportProgress: b_progress,
     });
   }
 
-
+  get<Res, ReqBody = any>(routeKey: RouterEnums, queries: { [key: string]: any } = null, b_progress = false): Observable<Res> {
+    const url = `${routeKey}${AppHttpClient.generateQueries(queries)}`;
+    return this.http.get<Res>(url, {
+      // params: AppHttpClient.convertParams(params),
+      reportProgress: b_progress
+    });
+  }
 }
 

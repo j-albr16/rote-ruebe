@@ -2,7 +2,7 @@ import {staticImplements} from './model-helper';
 import type Image from './image';
 import type User from './user';
 
-interface ExchangeObjectAttributes {
+export interface ExchangeObjectAttributes {
   id: string;
   title: string;
   description: string;

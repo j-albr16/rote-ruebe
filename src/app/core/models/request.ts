@@ -1,6 +1,8 @@
 import {staticImplements} from './model-helper';
 import type ExchangeObject from './exchange-object';
 
+// TODO: Add Status to Model
+// TODO: Add Read to Model
 interface RequestAttributes {
   id: string;
   amount: number;

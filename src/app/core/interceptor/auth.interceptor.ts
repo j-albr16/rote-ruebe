@@ -16,7 +16,9 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<any>> {
+    // Retrieving Auth String from Auth Service
     const auth: string = this.auth.getAuth();
+
     const authRequest = req.clone({
       url: `${environment.apiUrl}${req.url}`,
       headers: req.headers.set('Authorization', auth),

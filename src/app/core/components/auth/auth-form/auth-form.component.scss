@@ -1,28 +1,29 @@
 @use "sass:map";
-@import "styles";
+@import "src/styles/styles";
 
 .form {
   display: flex;
-  width: 100%;
+  flex-grow: 1;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
-  background: map.get($color, secondaryVariant);
+
+  padding: map.get($padding, little);
 
 
   .form__field {
 
     display: block;
-    padding: map.get($padding, medium);
-    width: 70%;
+    width: 60%;
+    padding: map.get($padding, little);
     border-radius: $borderRadius;
   }
 
   .button {
     display: block;
+    width: 25%;
     padding: map.get($padding, little);
-    width: 20%;
-    border-radius: $borderRadius;
+    border-radius: $borderRadius / 2;
   }
 
 }

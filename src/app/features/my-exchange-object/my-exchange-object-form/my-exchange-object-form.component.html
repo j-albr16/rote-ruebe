@@ -1,2 +1,92 @@
 <p>my-exchange-object-form works!</p>
 
+<!--  Init Form -->
+<form [formGroup]="exchangeObjectForm" (ngSubmit)="submit()" #f="ngForm">
+
+  <!--  Title         -->
+  <mat-form-field appearance="fill" [floatLabel]="floatLabelControl.value"
+                  [hideRequiredMarker]="hideRequiredControl.value">
+    <mat-label>
+      Title
+    </mat-label>
+    <input matNativeControl [formControl]="exchangeObjectForm.controls.title" [errorStateMatcher]="matcher"
+           [placeholder]="dynamicFormData.get('title').hint" type="text">
+    <mat-error *ngFor="let errorKey in exchangeObjectForm.get('title')?.errors?.valueOf() | keyvalue">
+      {{this.dynamicFormData.get('title').messages[errorKey]}}
+    </mat-error>
+  </mat-form-field>
+
+  <!--  Description   -->
+  <mat-form-field appearance="fill" [floatLabel]="floatLabelControl.value"
+                  [hideRequiredMarker]="hideRequiredControl.value">
+    <mat-label>
+      Description
+    </mat-label>
+    <textarea matNativeControl formControlName="description" [errorStateMatcher]="matcher"
+              [placeholder]="dynamicFormData.get('description').hint" type="text"></textarea>
+    <mat-error *ngFor="let errorKey in exchangeObjectForm.get('title')?.errors?.valueOf() | keyvalue">
+      {{this.dynamicFormData.get('title').messages[errorKey]}}
+    </mat-error>
+  </mat-form-field>
+
+  <!--  Amount        -->
+  <div>
+        <mat-form-field appearance="fill" [floatLabel]="floatLabelControl.value"
+                        [hideRequiredMarker]="hideRequiredControl.value">
+          <input type="number" matInput formControlName="amount" maxlength="5" [placeholder]="dynamicFormData.get('amount').hint">
+        </mat-form-field>
+    <mat-form-field>
+      <mat-label>Unit</mat-label>
+      <mat-select [(value)]="selectedUnit">
+        <mat-option *ngFor="let unit of amountUnits" [value]="unit.name">{{unit.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <!--  &lt;!&ndash;  Number        &ndash;&gt;-->
+  <!--  <mat-form-field>-->
+  <!--    <input type="number" formControlName="number" maxlength="6" [placeholder]="dynamicFormData.get('number').hint">-->
+  <!--  </mat-form-field>-->
+
+  <!--  &lt;!&ndash;  Place         &ndash;&gt;-->
+  <!--  <mat-form-field appearance="fill" [floatLabel]="floatLabelControl.value"-->
+  <!--                  [hideRequiredMarker]="hideRequiredControl.value">-->
+  <!--    <mat-label>-->
+  <!--    </mat-label>-->
+  <!--    <textarea [errorStateMatcher]="matcher" matNativeControl formControlName="place"-->
+  <!--              [placeholder]="dynamicFormData.get('place').hint" type="text"></textarea>-->
+  <!--    <mat-error *ngFor="let errorKey in exchangeObjectForm.get('place')?.errors?.valueOf() | keyvalue">-->
+  <!--      {{this.dynamicFormData.get('place').messages[errorKey]}}-->
+  <!--    </mat-error>-->
+  <!--  </mat-form-field>-->
+
+  <!--  &lt;!&ndash;  Exchange      &ndash;&gt;-->
+  <!--  <mat-form-field appearance="fill" [floatLabel]="floatLabelControl.value"-->
+  <!--                  [hideRequiredMarker]="hideRequiredControl.value">-->
+  <!--    <mat-label>-->
+  <!--    </mat-label>-->
+  <!--    <textarea matNativeControl formControlName="exchange" [errorStateMatcher]="matcher"-->
+  <!--              [placeholder]="dynamicFormData.get('exchange').hint" type="text"></textarea>-->
+  <!--    <mat-error *ngFor="let errorKey in exchangeObjectForm.get('exchange')?.errors?.valueOf() | keyvalue">-->
+  <!--      {{this.dynamicFormData.get('exchange').messages[errorKey]}}-->
+  <!--    </mat-error>-->
+  <!--  </mat-form-field>-->
+
+    <!--  Expiry Date   -->
+    <mat-form-field appearance="fill" [floatLabel]="floatLabelControl.value"
+                    [hideRequiredMarker]="hideRequiredControl.value">
+      <mat-label>
+        {{dynamicFormData.get('expiryDate').hint}}
+      </mat-label>
+      <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker"
+             formControlName="expiryDate" [placeholder]="dynamicFormData.get('expiryDate').hint" type="date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+  <!--  &lt;!&ndash;  b_free        &ndash;&gt;-->
+  <!--  <mat-checkbox formControlName="b_free">For Free</mat-checkbox>-->
+  <!--  &lt;!&ndash;  b_anonymous   &ndash;&gt;-->
+  <!--  <mat-checkbox formControlName="b_anonymous">Anonym</mat-checkbox>-->
+
+  <button mat-raised-button type="submit" class="button" [disabled]="exchangeObjectForm.invalid">Submit</button>
+</form>
