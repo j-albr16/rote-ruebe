@@ -26,12 +26,12 @@ export default class Message implements MessageAttributes, MessageMethods {
   public receiver!: string;
   public readonly createdAt!: Date;
 
-  constructor(constructor: MessageAttributes) {
-    this.id = constructor.id;
-    this.message = constructor.message;
-    this.createdAt = constructor.createdAt;
-    this.sender = constructor.sender;
-    this.receiver = constructor.receiver;
+  constructor(attributes: MessageAttributes) {
+    this.id = attributes.id;
+    this.message = attributes.message;
+    this.createdAt = attributes.createdAt;
+    this.sender = attributes.sender;
+    this.receiver = attributes.receiver;
   }
 
   public static fromJson(json: string): Message {

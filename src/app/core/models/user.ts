@@ -36,14 +36,14 @@ export default class User implements UserAttributes {
   public loginToken?: string;
   public readonly createdAt!: Date;
 
-  constructor(constructor: UserAttributes) {
-    this.id = constructor.id;
-    this.userName = constructor.userName;
-    this.description = constructor.description;
-    this.email = constructor.email;
-    this.image = constructor.image;
-    this.createdAt = constructor.createdAt;
-    this.loginToken = constructor.loginToken;
+  constructor(attributes: UserAttributes) {
+    this.id = attributes.id;
+    this.userName = attributes.userName;
+    this.description = attributes.description;
+    this.email = attributes.email;
+    this.image = attributes.image;
+    this.createdAt = attributes.createdAt;
+    this.loginToken = attributes.loginToken;
   }
 
   public static fromJson(json: { [key: string]: any }): User {

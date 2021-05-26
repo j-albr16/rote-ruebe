@@ -18,8 +18,8 @@ interface CategoryStatics {
 export default class Category implements CategoryAttributes, CategoryMethods{
   public id: string;
 
-  constructor(constructor: CategoryAttributes) {
-    this.id = constructor.id;
+  constructor(attributes: CategoryAttributes) {
+    this.id = attributes.id;
   }
 
   public static fromJson(json: string): Category {

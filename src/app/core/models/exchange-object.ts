@@ -45,20 +45,20 @@ export default class ExchangeObject implements ExchangeObjectMethods, ExchangeOb
   public imageList!: Image[];
   public readonly createdAt!: Date;
 
-  constructor(constructor: ExchangeObjectAttributes) {
-    this.id = constructor.id;
-    this.title = constructor.title;
-    this.description = constructor.description;
-    this.amount = constructor.amount;
-    this.number = constructor.number;
-    this.createdAt = constructor.createdAt;
-    this.place = constructor.place;
-    this.exchange = constructor.exchange;
-    this.expiryDate = constructor.expiryDate;
-    this.b_free = constructor.b_free;
-    this.provider = constructor.provider;
-    this.imageList = constructor.imageList;
-    this.b_anonymous = constructor.b_anonymous;
+  constructor(attributes: ExchangeObjectAttributes) {
+    this.id = attributes.id;
+    this.title = attributes.title;
+    this.description = attributes.description;
+    this.amount = attributes.amount;
+    this.number = attributes.number;
+    this.createdAt = attributes.createdAt;
+    this.place = attributes.place;
+    this.exchange = attributes.exchange;
+    this.expiryDate = attributes.expiryDate;
+    this.b_free = attributes.b_free;
+    this.provider = attributes.provider;
+    this.imageList = attributes.imageList;
+    this.b_anonymous = attributes.b_anonymous;
   }
 
   public static fromJson(json: string): ExchangeObject {

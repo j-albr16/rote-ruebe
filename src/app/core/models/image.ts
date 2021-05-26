@@ -24,11 +24,11 @@ export default class Image implements ImageAttributes {
   public description?: string;
   public readonly createdAt!: Date;
 
-  constructor(constructor: ImageAttributes) {
-    this.id = constructor.id;
-    this.title = constructor.title;
-    this.description = constructor.description;
-    this.createdAt = constructor.createdAt;
+  constructor(attributes: ImageAttributes) {
+    this.id = attributes.id;
+    this.title = attributes.title;
+    this.description = attributes.description;
+    this.createdAt = attributes.createdAt;
   }
 
   public static fromJson(json: string): Image {

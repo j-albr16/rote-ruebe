@@ -26,11 +26,11 @@ export default class Comment implements CommentAttributes, CommentMethods {
   public author?: User;
   public exchangeObject?: ExchangeObject;
 
-  constructor(constructor: CommentAttributes) {
-    this.id = constructor.id;
-    this.author = constructor.author;
-    this.text = constructor.text;
-    this.exchangeObject = constructor.exchangeObject;
+  constructor(attributes: CommentAttributes) {
+    this.id = attributes.id;
+    this.author = attributes.author;
+    this.text = attributes.text;
+    this.exchangeObject = attributes.exchangeObject;
   }
 
   public static fromJson(json: string): Comment {
