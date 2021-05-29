@@ -1,8 +1,16 @@
 import {HttpClient, HttpParams, HttpRequest, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {ChatRoutes, RouterEnums, table} from 'rote-ruebe-types';
+import {
+  ChatRoutes,
+  FetchUserList,
+  RouterEnums,
+  URLArgs,
+  URLType,
+  UserFilter,
+  Methode, HttpType
+} from 'rote-ruebe-types';
 import {Injectable} from '@angular/core';
-import {URLArgs, URLType} from 'rote-ruebe-types/build/utils/shared';
+import {map} from 'rxjs/operators';
 
 
 export function appHttpClientCreator(http: HttpClient): AppHttpClient {
@@ -47,16 +55,28 @@ export default class AppHttpClient {
     return queryString;
   }
 
-  request<Res, Req extends URLArgs = null>(routeKey: RouterEnums, data: Req, b_progress = false): Observable<Res> {
-    let url: string = routeKey;
-    if (data.queries) {
-      url += AppHttpClient.generateQueries(data.queries);
-      delete data.queries;
-    }
-    return this.http.request<Res>(table.get(routeKey).httpType , url, {
-      reportProgress: b_progress,
-      body: data,
-    });
+  request<Req, Res, Queries>(methode: Methode<Req, Res, Queries>): (body: Req, params: Queries) => Observable<any> {
+    /*if (methode.httpType === HttpType.POST){
+      const func: <D, T, Q>(i: D, q: Q) => Observable<T> =
+        <D, T, Q>(body: D, params: Q) =>
+        this.http.post<T>(methode.name, body, {
+          responseType: 'json',
+          params: params ? AppHttpClient.convertParams(params) : null,
+        }).pipe(
+          map(data => data as T)
+        );
+      return methode.forming(func);
+    }*/
+    const func: <D, T, Q>(i: D, q: Q) => Observable<T> =
+      <D, T, Q>(body: D, params?: Q) =>
+        this.http.request<T>(methode.httpType.toString(), methode.name, {
+          responseType: 'json',
+          body,
+          params: params ? AppHttpClient.convertParams(params) : null,
+        }).pipe(
+          map(data => data as T)
+        );
+    return methode.forming(func);
   }
 
   post<Res, ReqBody = any>(routeKey: RouterEnums, body: ReqBody, queries: { [key: string]: any } = null, b_progress = false)
