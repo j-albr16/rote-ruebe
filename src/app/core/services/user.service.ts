@@ -1,23 +1,15 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {BehaviorSubject, from, Observable, Subject} from 'rxjs';
+import {HttpParams} from '@angular/common/http';
+import {from, Observable, Subject} from 'rxjs';
 import {map, mergeMap, tap} from 'rxjs/operators';
 
-import {
-  routes,
-  UserFilter,
-  UserListRequest,
-  UserListResponse,
-  UserRequest,
-  UserResponse,
-  UserRoutes,
-  ChangeUserRequest,
-} from 'rote-ruebe-types';
+import {ChangeUser, FetchUserList, routes, Methode, UserFilter, UserRoutes, FetchUser} from 'rote-ruebe-types';
 
 import MemorySubject from '@core/utils/rxjs/MemorySubject';
 import User from '@core/models/user';
 import Image from '@core/models/image';
 import {AuthService} from '@core/services/auth.service';
+import AppHttpClient from '@core/utils/app-http-client';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +17,7 @@ import {AuthService} from '@core/services/auth.service';
 export class UserService {
   userMap = new Map();
 
-  constructor(private http: HttpClient, private authService: AuthService) {
+  constructor(private http: AppHttpClient, private authService: AuthService) {
   }
 
   /**
@@ -74,11 +66,8 @@ export class UserService {
   /**
    * @return Observable either emits true and completes when the server accepts the change or errors
    */
-  changeMyUser(changedUser: ChangeUserRequest): Observable<boolean> {
-    const request: ChangeUserRequest = changedUser;
-    return this.http.post(routes.get(UserRoutes.ChangeUser), request).pipe(
-      map(value => true),
-    );
+  changeMyUser(changedUserBody: ChangeUser.Request, changedUserQueries: ChangeUser.Queries): Observable<boolean> {
+    return this.http.request(ChangeUser.methode)(changedUserBody, changedUserQueries).pipe(map(value => true));
   }
 
   /**
@@ -93,43 +82,53 @@ export class UserService {
     );
   }
 
+  private fetchUserList(userFilter: UserFilter, amount: number, furthestUserId?: string): Observable<User>{
+    return this.http.request(FetchUserList.methode)({userFilter}, {amount, furthestUserId}).pipe(
+      mergeMap((value: FetchUserList.Response) => {
+        // const res = value as UserListResponse;
+        return from(value.userList).pipe(
+          // return from(res.userList).pipe(
+          map(userResponse => {
+            return this.responseToUser(userResponse);
+          })
+        );
+        })
+    );
+  }
+/*
   private fetchUserList(userFilter: UserFilter, amount: number, furthestUserId?: string): Observable<User> {
-    const request: UserListRequest = {
+    const request: FetchUserList.Request = {
       amount,
       furthestUserId,
       userFilter,
     };
 
-    return this.http.get(routes.get(UserRoutes.FetchUserList), {
+    return this.http.get(UserRoutes.FetchUserList, {
       params: this.getParams(request),
     }).pipe(
       mergeMap(value => {
         // const res = value as UserListResponse;
-        const res = value as UserListResponse[];
+        const res = value as FetchUserList.Response[];
         return from(res).pipe(
           // return from(res.userList).pipe(
           map(valueEntry => {
-            const userResponse = valueEntry as UserResponse;
+            const userResponse = valueEntry as FetchUser.Response;
             return this.responseToUser(userResponse);
           })
         );
       })
     );
-  }
+  }*/
 
 
   private fetchUser(userId: string): Observable<User> {
-    return this.http.get(routes.get(UserRoutes.FetchUser), {
-      params: {userId}
-    }).pipe(
-      map(value => {
-        const res: UserResponse = value as UserResponse;
-        return this.responseToUser(res);
-      })
+    return this.http.request(FetchUser.methode)(null, {userId}).pipe(
+      map((userResponse: FetchUser.Response) =>
+      this.responseToUser(userResponse))
     );
   }
 
-  private responseToUser(response: UserResponse): User {
+  private responseToUser(response: FetchUser.Response): User {
     return new User({
       id: response.id,
       createdAt: response.createdAt,
@@ -139,13 +138,4 @@ export class UserService {
       userName: response.userName,
     });
   }
-
-  private getParams(object: any): HttpParams {
-    let httpParams = new HttpParams();
-    Object.keys(object).forEach((key) => {
-      httpParams = httpParams.append(key, JSON.stringify(object[key]));
-    });
-    return httpParams;
-  }
-
 }
