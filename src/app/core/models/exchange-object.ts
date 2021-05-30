@@ -1,7 +1,8 @@
 import {staticImplements} from './model-helper';
-import type AppImage from './app-image';
-import type User from './user';
+import AppImage from './app-image';
+import User from './user';
 import {IAppImage, IExchangeObject, IUser} from 'rote-ruebe-types';
+import {DomainConverter} from '@core/utils/domain-converter';
 
 
 export default class ExchangeObject implements IExchangeObject {
@@ -15,8 +16,8 @@ export default class ExchangeObject implements IExchangeObject {
   public get expiryDate(): Date { return this.state.expiryDate };
   public get b_free(): boolean { return this.state.b_free };
   public get b_anonymous(): boolean { return this.state.b_anonymous };
-  public get provider(): IUser { return this.state.provider }; // anonymous possible
-  public get imageList(): IAppImage[] { return this.state.imageList };
+  public get provider(): User { return DomainConverter.fromDto(User, this.state.provider) }; // anonymous possible
+  public get imageList(): AppImage[] { return this.state.imageList.map(iAppImage => DomainConverter.fromDto(AppImage, iAppImage)) };
   public get createdAt(): Date { return this.state.createdAt };
   public get updatedAt(): Date { return this.state.updatedAt };
 
