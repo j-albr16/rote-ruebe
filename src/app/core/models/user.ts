@@ -4,7 +4,7 @@ import {staticImplements} from './model-helper';
 interface UserAttributes {
   id: string;
   userName: string;
-  description?: string;
+  description: string;
   email?: string;
   createdAt: Date;
   image?: Image;
@@ -30,7 +30,7 @@ interface UserStatics {
 export default class User implements UserAttributes {
   public id!: string;
   public userName!: string;
-  public description?: string;
+  public description: string;
   public email!: string;
   public image?: Image;
   public loginToken?: string;

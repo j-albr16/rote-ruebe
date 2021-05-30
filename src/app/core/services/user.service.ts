@@ -95,30 +95,6 @@ export class UserService {
         })
     );
   }
-/*
-  private fetchUserList(userFilter: UserFilter, amount: number, furthestUserId?: string): Observable<User> {
-    const request: FetchUserList.Request = {
-      amount,
-      furthestUserId,
-      userFilter,
-    };
-
-    return this.http.get(UserRoutes.FetchUserList, {
-      params: this.getParams(request),
-    }).pipe(
-      mergeMap(value => {
-        // const res = value as UserListResponse;
-        const res = value as FetchUserList.Response[];
-        return from(res).pipe(
-          // return from(res.userList).pipe(
-          map(valueEntry => {
-            const userResponse = valueEntry as FetchUser.Response;
-            return this.responseToUser(userResponse);
-          })
-        );
-      })
-    );
-  }*/
 
 
   private fetchUser(userId: string): Observable<User> {
