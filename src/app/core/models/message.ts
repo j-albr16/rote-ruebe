@@ -1,46 +1,14 @@
 import {staticImplements} from './model-helper';
-
-interface MessageAttributes {
-  id: string;
-  message: string;
-  createdAt: Date;
-  sender: string; // userId
-  receiver: string; // userId
-}
-
-interface MessageMethods {
-  toJson(): string;
-}
-
-interface MessageStatic {
-  new(): MessageMethods;
-  fromJson(json: string): Message;
-}
+import {IMessage, IUser} from 'rote-ruebe-types';
 
 
-@staticImplements<MessageStatic>()
-export default class Message implements MessageAttributes, MessageMethods {
-  public id!: string;
-  public message!: string;
-  public sender!: string;
-  public receiver!: string;
-  public readonly createdAt!: Date;
+export default class Message implements IMessage {
+  public get id(): string { return this.state.id};
+  public get message(): string { return this.state.message };
+  public get sender(): IUser { return this.state.sender };
+  public get receiver(): IUser { return this.state.receiver };
+  public get createdAt(): Date { return this.state.createdAt };
 
-  constructor(attributes: MessageAttributes) {
-    this.id = attributes.id;
-    this.message = attributes.message;
-    this.createdAt = attributes.createdAt;
-    this.sender = attributes.sender;
-    this.receiver = attributes.receiver;
-  }
+  constructor(private state: IMessage) {}
 
-  public static fromJson(json: string): Message {
-    const object = JSON.parse(json);
-    object.createdAt = new Date(object.createdAt);
-    return new Message(object);
-  }
-
-  public toJson(): string {
-    return JSON.stringify(this);
-  }
 }

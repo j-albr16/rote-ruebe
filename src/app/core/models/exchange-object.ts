@@ -1,75 +1,24 @@
 import {staticImplements} from './model-helper';
-import type Image from './image';
+import type AppImage from './app-image';
 import type User from './user';
-
-export interface ExchangeObjectAttributes {
-  id: string;
-  title: string;
-  description: string;
-  amount?: number;
-  number?: number;
-  createdAt: Date;
-  place: string;
-  exchange: string;
-  expiryDate?: Date;
-  b_free: boolean;
-  b_anonymous: boolean;
-  provider?: User; // anonymous possible
-  imageList: Image[];
-// TODO: Implement Category Implement Tag
-}
-
-interface ExchangeObjectMethods {
-  toJson(): string;
-}
-
-interface ExchangeObjectStatic {
-  new(): ExchangeObjectMethods;
-
-  fromJson(json: string): ExchangeObject;
-}
-
-@staticImplements<ExchangeObjectStatic>()
-export default class ExchangeObject implements ExchangeObjectMethods, ExchangeObjectAttributes {
-  public id!: string;
-  public title!: string;
-  public description!: string;
-  public amount?: number;
-  public number?: number;
-  public place!: string;
-  public exchange!: string;
-  public expiryDate?: Date;
-  public b_free!: boolean;
-  public b_anonymous!: boolean;
-  public provider?: User; // anonymous possible
-  public imageList!: Image[];
-  public readonly createdAt!: Date;
-
-  constructor(attributes: ExchangeObjectAttributes) {
-    this.id = attributes.id;
-    this.title = attributes.title;
-    this.description = attributes.description;
-    this.amount = attributes.amount;
-    this.number = attributes.number;
-    this.createdAt = attributes.createdAt;
-    this.place = attributes.place;
-    this.exchange = attributes.exchange;
-    this.expiryDate = attributes.expiryDate;
-    this.b_free = attributes.b_free;
-    this.provider = attributes.provider;
-    this.imageList = attributes.imageList;
-    this.b_anonymous = attributes.b_anonymous;
-  }
-
-  public static fromJson(json: string): ExchangeObject {
-    const object = JSON.parse(json);
-    object.createdAt = new Date(object.createdAt);
-    return new ExchangeObject(object);
-  }
-
-  public toJson(): string {
-    return JSON.stringify(this);
-  }
+import {IAppImage, IExchangeObject, IUser} from 'rote-ruebe-types';
 
 
+export default class ExchangeObject implements IExchangeObject {
+  public get id(): string { return this.state.id };
+  public get title(): string { return this.state.title };
+  public get description(): string { return this.state.description };
+  public get amount(): number { return this.state.amount };
+  public get number(): number { return this.state.number};
+  public get place(): string { return this.state.place};
+  public get exchangeWay(): string { return this.state.exchangeWay };
+  public get expiryDate(): Date { return this.state.expiryDate };
+  public get b_free(): boolean { return this.state.b_free };
+  public get b_anonymous(): boolean { return this.state.b_anonymous };
+  public get provider(): IUser { return this.state.provider }; // anonymous possible
+  public get imageList(): IAppImage[] { return this.state.imageList };
+  public get createdAt(): Date { return this.state.createdAt };
+  public get updatedAt(): Date { return this.state.updatedAt };
+
+  constructor(private state: IExchangeObject) {}
 }

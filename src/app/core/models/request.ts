@@ -1,55 +1,21 @@
 import {staticImplements} from './model-helper';
 import type ExchangeObject from './exchange-object';
+import {IRequest, Status} from 'rote-ruebe-types';
 
-// TODO: Add Status to Model
-// TODO: Add Read to Model
-interface RequestAttributes {
-  id: string;
-  amount: number;
-  text: string;
-  createdAt: Date;
-  sender?: string; // userId
-  receiver?: string; // userId
-  exchangeObject?: ExchangeObject;
-}
 
-interface RequestMethods {
-  toJson: () => string;
-}
+export default class Request implements IRequest{
+  public get id(): string { return this.state.id };
+  public get amount(): number { return this.state.amount };
+  public get number(): number { return this.state.number };
+  public get text(): string { return this.state.text };
+  public get sender(): string { return this.state.sender };
+  public get receiver(): string { return this.state.receiver };
+  public get exchangeObjectId(): string { return this.state.exchangeObjectId };
+  public get createdAt(): Date { return this.state.createdAt };
+  public get read(): boolean { return this.state.read };
+  public get status(): Status { return this.state.status };
 
-interface RequestStatic {
-  new(): RequestMethods;
-  fromJson: (json: string) => Request;
-}
+  constructor(private state: IRequest) {}
 
-@staticImplements<RequestStatic>()
-export default class Request implements RequestAttributes, RequestMethods{
-  public id!: string;
-  public amount!: number;
-  public text!: string;
-  public sender?: string;
-  public receiver?: string;
-  public exchangeObject?: ExchangeObject;
-  public readonly createdAt!: Date;
-
-  constructor(attributes: RequestAttributes) {
-    this.id = attributes.id;
-    this.amount = attributes.amount;
-    this.text = attributes.text;
-    this.sender = attributes.sender;
-    this.receiver = attributes.receiver;
-    this.exchangeObject = attributes.exchangeObject;
-    this.createdAt = attributes.createdAt;
-  }
-
-  public static fromJson(json: string): Request {
-    const object = JSON.parse(json);
-    object.createdAt = new Date(object.createdAt);
-    return new Request(object);
-  }
-
-  public toJson(): string {
-    return JSON.stringify(this);
-  }
 
 }

@@ -7,7 +7,7 @@ import {ChangeUser, FetchUserList, routes, Methode, UserFilter, UserRoutes, Fetc
 
 import MemorySubject from '@core/utils/rxjs/MemorySubject';
 import User from '@core/models/user';
-import Image from '@core/models/image';
+import AppImage from '@core/models/app-image';
 import {AuthService} from '@core/services/auth.service';
 import AppHttpClient from '@core/utils/app-http-client';
 
@@ -110,7 +110,7 @@ export class UserService {
       createdAt: response.createdAt,
       description: response.description,
       email: response.email,
-      image: new Image(response.image),
+      image: new AppImage(response.image),
       userName: response.userName,
     });
   }
