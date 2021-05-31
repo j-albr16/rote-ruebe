@@ -1,44 +1,18 @@
-import {staticImplements} from './model-helper';
-import type ExchangeObject from './exchange-object';
-import type User from './user';
 
-interface CommentAttributes {
-  id: string;
-  text: string;
-  author?: User;
-  exchangeObject?: ExchangeObject;
-}
+import {IComment, IUser} from 'rote-ruebe-types';
+import User from '@core/models/user';
+import {DomainConverter} from '@core/utils/domain-converter';
 
-interface CommentMethods {
-  toJson: () => string;
-}
 
-interface CommentStatic {
-  new(): CommentMethods;
+export default class Comment implements IComment {
+  public get id(): string { return this.state.id };
+  public get text(): string { return  this.state.text};
+  public get author(): User { return DomainConverter.fromDto(User, this.state.author)};
+  public get exchangeObjectId(): string { return this.state.exchangeObjectId};
+  public get updatedAt(): Date { return this.state.updatedAt }
+  public get createdAt(): Date { return this.state.createdAt }
 
-  fromJson(json: string): Comment;
-}
-
-@staticImplements<CommentStatic>()
-export default class Comment implements CommentAttributes, CommentMethods {
-  public id!: string;
-  public text!: string;
-  public author?: User;
-  public exchangeObject?: ExchangeObject;
-
-  constructor(attributes: CommentAttributes) {
-    this.id = attributes.id;
-    this.author = attributes.author;
-    this.text = attributes.text;
-    this.exchangeObject = attributes.exchangeObject;
+  constructor(private state: IComment) {
   }
-
-  public static fromJson(json: string): Comment {
-    return new Comment(JSON.parse(json));
-  }
-
-  public toJson(): string {
-    return JSON.stringify(this);
-  }
-
 }
+

@@ -1,25 +1,21 @@
-import type Message from './message';
-import type User from './user';
+import Message from './message';
+import User from './user';
+import {IChat, IMessage, IUser} from 'rote-ruebe-types';
+import {DomainConverter} from '@core/utils/domain-converter';
 
-interface ChatAttributes {
-  userList: User[];
-  messageList: Message[];
-}
 
-interface ChatMethods {
-  addMessage(message: Message): void;
-}
+export default class Chat implements IChat {
 
-export default class Chat implements ChatAttributes, ChatMethods {
-  public readonly userList!: User[];
-  public readonly messageList!: Message[];
+  public get id(): string { return this.state.id; }
+  public get userList(): User[] { return this.state.userList.map(iUser => DomainConverter.fromDto(User, iUser)) }
+  public get messageList(): Message[] { return this.state.messageList.map(iMessage => DomainConverter.fromDto(Message, iMessage)) }
+  public get createdAt(): Date { return this.state.createdAt; }
+  public get updatedAt(): Date { return this.state.updatedAt; }
 
-  constructor(attributes: ChatAttributes) {
-    this.userList = attributes.userList;
-    this.messageList = attributes.messageList;
+  constructor(private state: IChat) {
   }
 
   public addMessage(message: Message): void {
-    this.messageList.push(message);
+    this.state.messageList.push(message);
   }
 }

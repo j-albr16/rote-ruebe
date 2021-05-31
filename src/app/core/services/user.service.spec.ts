@@ -6,16 +6,17 @@ import {
 } from '@angular/common/http/testing';
 
 import { UserService } from './user.service';
-import Image from '../models/image';
+import AppImage from '../models/app-image';
 import User from '../models/user';
-import {FetchUser, UserRoutes} from 'rote-ruebe-types';
+import {FetchUser, IUser, UserRoutes} from 'rote-ruebe-types';
+import {DomainConverter} from '@core/utils/domain-converter';
 
-fdescribe('UserService', () => {
+describe('UserService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, AppHttpClient],
-      providers: [UserService]
+      providers: [UserService, AppHttpClient]
     });
   });
 
@@ -24,18 +25,21 @@ fdescribe('UserService', () => {
     inject(
       [HttpTestingController, UserService],
       (httpMock: HttpTestingController, userService: UserService) => {
+        const mockIUser: IUser = { id: 'XYC1234',
+          description: 'Someething',
+          image: {
+            id: 'ID01',
+            description: 'the Image',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            title: 'TestImage'
+          },
+          userName: 'Timmy',
+          createdAt:  new Date(),
+          updatedAt: new Date(),
+        }
         const mockUser: User =
-          new User({ id: 'XYC1234',
-            description: 'Someething',
-            image: new Image({
-              id: 'ID01',
-              description: 'the Image',
-              createdAt: new Date(),
-              title: 'TestImage'
-            }),
-            userName: 'Timmy',
-            createdAt:  new Date(),
-          });
+          DomainConverter.fromDto(User, mockIUser);
         userService.getUser('XYC1234').subscribe((user) => {
 
               expect(user).toEqual(mockUser);
