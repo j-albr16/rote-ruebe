@@ -56,6 +56,7 @@ describe('UserService', () => {
           image: mockUser.image,
           userName: mockUser.userName,
           createdAt:  mockUser.createdAt,
+          updatedAt: mockUser.updatedAt,
         };
         mockReq.flush(res);
 
