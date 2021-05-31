@@ -4,14 +4,15 @@ import {Observable, of} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {
   AuthRoutes,
-  LogInRequest,
-  LogInResponse,
-  RequestResetPasswordRequest,
-  ResetPasswordRequest,
-  SignUpRequest, TryAutoLoginRequest, TryAutoLoginResponse,
+  LogIn,
+  RequestResetPassword,
+  ResetPassword,
+  SignUp,
+  TryAutoLogIn,
 } from 'rote-ruebe-types';
 import AppHttpClient from '@core/utils/app-http-client';
-import {COOKIES, CookieService} from '@core/services/cookie.service';
+import { DomainConverter } from '@core/utils/domain-converter';
+// import {COOKIES, CookieService} from '@core/services/cookie.service';
 
 
 export function authFactory(authService: AuthService): () => Promise<void> {
@@ -23,8 +24,9 @@ export function authFactory(authService: AuthService): () => Promise<void> {
 })
 export class AuthService {
   private user: User;
+  private loginToken: string;
 
-  constructor(private http: AppHttpClient, private cookieService: CookieService) {
+  constructor(private http: AppHttpClient) { // private cookieService: CookieService
   }
 
   /**
@@ -38,14 +40,14 @@ export class AuthService {
    * Checking Whether Auth Token is Available in Auth User Model
    */
   get isAuth(): boolean {
-    return !!this.user?.loginToken;
+    return !!this.loginToken;
   }
 
   /**
    * Get Auth String for API Authentication
    */
   getAuth(): string {
-    return this.user?.id + ':' + this.user?.loginToken;
+    return this.user?.id + ':' + this.loginToken;
   }
 
   /**
@@ -53,19 +55,19 @@ export class AuthService {
    * Is Called Right when Auth Service is Init
    */
   public tryAutoLogin(): Promise<void> {
-    const token = this.cookieService.getCookie(COOKIES.TOKEN);
-    const userId = this.cookieService.getCookie(COOKIES.USER_ID);
+    const token = null; // this.cookieService.getCookie(COOKIES.TOKEN);
+    const userId = null // this.cookieService.getCookie(COOKIES.USER_ID);
     if (!token || !userId) {
       return;
     }
-    const userData: TryAutoLoginRequest = {
+    const userData: TryAutoLogIn.Request = {
       id: userId,
       loginToken: token,
     };
 
-    this.http.post<TryAutoLoginResponse>(AuthRoutes.TryAutoLogIn, userData).subscribe(
+    this.http.post<TryAutoLogIn.Response>(AuthRoutes.TryAutoLogIn, userData).subscribe(
       (user) => {
-        this.user = User.fromJson(user);
+        this.user = DomainConverter.fromDto(User, user);
       },
       err => {
         if (err) return;
@@ -77,10 +79,10 @@ export class AuthService {
    * Log In http Request. False => ErrorList. Valid => Auth User Model with Token
    * @param userData email password
    */
-  public logIn(userData: LogInRequest): Observable<string | null> {
-    return this.http.post<LogInResponse>(AuthRoutes.LogIn, userData).pipe(
+  public logIn(userData: LogIn.Request): Observable<string | null> {
+    return this.http.post<LogIn.Response>(AuthRoutes.LogIn, userData).pipe(
       tap(data => {
-        this.user = User.fromJson(data);
+        this.user = DomainConverter.fromDto(User, data);
       }),
       catchError<null, Observable<string | null>>(err => of(err)));
   }
@@ -89,7 +91,7 @@ export class AuthService {
    * Making API Call to create new User Model
    * @param user User Data for new User. UserName, Password, ConfirmPassword, Email
    */
-  public singUp(user: SignUpRequest): Observable<string | null> {
+  public singUp(user: SignUp.Request): Observable<string | null> {
     return this.http.post<null>(AuthRoutes.SignUp, user).pipe(
       catchError<null, Observable<string | null>>(err => of(err))
     );
@@ -99,7 +101,7 @@ export class AuthService {
    * API Call to Request new Password. Email will be send to User email Address
    * @param user Email
    */
-  public requestResetPassword(user: RequestResetPasswordRequest): Observable<string | null> {
+  public requestResetPassword(user: RequestResetPassword.Request): Observable<string | null> {
     return this.http.post<null>(AuthRoutes.RequestResetPassword, user).pipe(
       catchError<null, Observable<string | null>>(err => of(err))
     );
@@ -109,7 +111,7 @@ export class AuthService {
    * API Call to Reset Password
    * @param user Password and Confirm Password.
    */
-  public resetPassword(user: ResetPasswordRequest): Observable<string | null> {
+  public resetPassword(user: ResetPassword.Request): Observable<string | null> {
     return this.http.post<null>(AuthRoutes.ResetPassword, user).pipe(
       catchError<null, Observable<string | null>>(err => of(err))
     );
