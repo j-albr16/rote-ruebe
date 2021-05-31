@@ -10,6 +10,7 @@ import User from '@core/models/user';
 import AppImage from '@core/models/app-image';
 import {AuthService} from '@core/services/auth.service';
 import AppHttpClient from '@core/utils/app-http-client';
+import {DomainConverter} from '@core/utils/domain-converter';
 
 @Injectable({
   providedIn: 'root'
@@ -89,7 +90,7 @@ export class UserService {
         return from(value.userList).pipe(
           // return from(res.userList).pipe(
           map(userResponse => {
-            return this.responseToUser(userResponse);
+            return DomainConverter.fromDto(User, userResponse);
           })
         );
         })
@@ -100,18 +101,8 @@ export class UserService {
   private fetchUser(userId: string): Observable<User> {
     return this.http.request(FetchUser.methode)(null, {userId}).pipe(
       map((userResponse: FetchUser.Response) =>
-      this.responseToUser(userResponse))
+      DomainConverter.fromDto(User, userResponse))
     );
   }
 
-  private responseToUser(response: FetchUser.Response): User {
-    return new User({
-      id: response.id,
-      createdAt: response.createdAt,
-      description: response.description,
-      email: response.email,
-      image: new AppImage(response.image),
-      userName: response.userName,
-    });
-  }
 }
