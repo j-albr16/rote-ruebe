@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MyExchangeObjectFormComponent} from './my-exchange-object-form/my-exchange-object-form.component';
 import {ReactiveFormsModule} from '@angular/forms';
-import {MaterialModule} from '@core/utils/material/material.module';
+// import {MaterialModule} from '@core/utils/material/material.module';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatDatepickerModule} from '@angular/material/datepicker';
@@ -17,13 +17,13 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     CommonModule,
     ReactiveFormsModule,
     // Material
-    MatButtonModule,
+   /* MatButtonModule,
     MatInputModule,
     MatSelectModule,
     MatCheckboxModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatFormFieldModule,
+    MatFormFieldModule,*/
   ],
   providers: []
 })

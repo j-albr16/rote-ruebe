@@ -2,9 +2,9 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import DynamicForm from '@core/utils/form/dynamic-form';
 import DynamicFormData from '@core/utils/form/dynamic-form-data';
-import ExchangeObject, {ExchangeObjectAttributes} from '@core/models/exchange-object';
+import ExchangeObject from '@core/models/exchange-object';
 import {AuthErrorStateMatcher} from '@core/components/auth/auth-form/auth-form.component';
-import {enumKeys} from 'rote-ruebe-types';
+import {enumKeys, IExchangeObject} from 'rote-ruebe-types';
 import AppHttpClient from '@core/utils/app-http-client';
 import Unit, {weightUnit} from '@core/utils/units';
 
@@ -31,7 +31,7 @@ export class MyExchangeObjectFormComponent implements OnInit {
    * Class to Store all Form Data Including:
    * Hints, inputType, validators, errorMessages
    */
-  public dynamicFormData = DynamicFormData.fromArray<ExchangeObjectAttributes>([
+  public dynamicFormData = DynamicFormData.fromArray<IExchangeObject>([
     {
       name: 'title',
       inputType: 'text',
