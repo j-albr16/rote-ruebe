@@ -1,67 +1,126 @@
-import { TestBed, inject } from '@angular/core/testing';
-import AppHttpClient from '@core/utils/app-http-client';
-import {
-  HttpClientTestingModule,
-  HttpTestingController
-} from '@angular/common/http/testing';
-
-import { UserService } from './user.service';
-import AppImage from '../models/app-image';
-import User from '../models/user';
-import {FetchUser, IUser, UserRoutes} from 'rote-ruebe-types';
+import {TestBed} from '@angular/core/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {UserService} from './user.service';
+import User from '@core/models/user';
 import {DomainConverter} from '@core/utils/domain-converter';
+import {mock5User} from '../../../../spec/mock-data/user';
+import AppHttpClient from '@core/utils/app-http-client';
+import {FetchUser, FetchUserList, IUser, OrderType} from 'rote-ruebe-types';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {DevLogInterceptor} from '@core/interceptor/dev-log.interceptor';
 
 describe('UserService', () => {
-
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, AppHttpClient],
-      providers: [UserService, AppHttpClient]
+      imports: [ HttpClientTestingModule ],
+      providers: [ AppHttpClient, UserService,
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: DevLogInterceptor,
+          multi: true,
+        }]
     });
   });
 
-  it(
-    'should get users',
-    inject(
-      [HttpTestingController, UserService],
-      (httpMock: HttpTestingController, userService: UserService) => {
-        const mockIUser: IUser = { id: 'XYC1234',
-          description: 'Someething',
-          image: {
-            id: 'ID01',
-            description: 'the Image',
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            title: 'TestImage'
-          },
-          userName: 'Timmy',
-          createdAt:  new Date(),
-          updatedAt: new Date(),
+  describe('getUser', () => {
+
+    let userService: UserService;
+    let appHttpClient: AppHttpClient;
+    let httpTestingController: HttpTestingController;
+    let mockIUserList: IUser[];
+    let mockIUser: IUser;
+    let mockIUser2: IUser;
+
+    beforeEach(() => {
+      userService = TestBed.inject(UserService);
+      appHttpClient = TestBed.inject(AppHttpClient);
+      httpTestingController = TestBed.inject(HttpTestingController);
+      mockIUserList = mock5User;
+      mockIUser = mock5User[0];
+      mockIUser2 = mock5User[1];
+    });
+
+    it('should fetch User 0', () => {
+      userService.getUser('0').subscribe((user) => {
+        expect(user).toEqual(DomainConverter.fromDto(User, mockIUser));
+      });
+
+      const request = httpTestingController.expectOne(FetchUser.methode.name + '?userId=0');
+      request.flush(mockIUser);
+      httpTestingController.verify();
+    });
+
+    it('should get User 1 without fetching', async () => {
+      userService.userMap = new Map<string, User>();
+
+      userService.getUser('1').subscribe( (user) => {});
+      const subRequest = await httpTestingController.expectOne(FetchUser.methode.name + '?userId=1');
+      subRequest.flush(mockIUser2);
+
+      httpTestingController.verify();
+
+      let b_recieved = false;
+
+      userService.getUser('1').subscribe((user) => {
+        expect(user).toEqual(DomainConverter.fromDto(User, mockIUser2));
+        b_recieved = true;
+      });
+
+      await httpTestingController.expectNone(FetchUser.methode.name + '?userId=1');
+      expect(b_recieved).toBe(true);
+      httpTestingController.verify();
+    });
+
+    it('should fetch userList', async () => {
+      const obsSub = userService.getUserList({orderBy: OrderType.Alphabetical});
+      const obs = obsSub.observable;
+      const sub = obsSub.subject;
+
+      const sortedMock = mockIUserList.sort((one, two) => (one.userName > two.userName ? 1 : -1));
+      let pointer = 0;
+
+      let firstRes: (value) => void;
+      let secondRes: (value) => void;
+
+      const firstProm = new Promise((resolve, reject) => {
+        firstRes = resolve;
+      });
+      const secondProm = new Promise((resolve, reject) => {
+        secondRes = resolve;
+      });
+
+      obs.subscribe((user) => {
+        expect(user).toEqual(DomainConverter.fromDto(User, sortedMock[pointer]));
+        pointer += 1;
+        if (pointer === 2){
+          firstRes(null);
         }
-        const mockUser: User =
-          DomainConverter.fromDto(User, mockIUser);
-        userService.getUser('XYC1234').subscribe((user) => {
+        if (pointer === 5){
+          secondRes(null);
+        }
 
-              expect(user).toEqual(mockUser);
+      });
 
-        });
 
-        const mockReq = httpMock.expectOne(UserRoutes.FetchUser);
+      sub.next(2);
+      const request = await httpTestingController.expectOne(FetchUserList.methode.name + '?amount=2&furthestUserId=undefined');
+      const listResponse: FetchUserList.Response = {userList: sortedMock.slice(0, 2)};
+      request.flush(listResponse);
 
-        expect(mockReq.cancelled).toBeFalsy();
-        expect(mockReq.request.responseType).toEqual('json');
-        const res: FetchUser.Response = {
-          id: mockUser.id,
-          description: mockUser.description,
-          image: mockUser.image,
-          userName: mockUser.userName,
-          createdAt:  mockUser.createdAt,
-          updatedAt: mockUser.updatedAt,
-        };
-        mockReq.flush(res);
+      await firstProm;
+      expect(pointer).toEqual(2);
 
-        httpMock.verify();
-      }
-    )
-  )
+
+
+      const request2 = httpTestingController.expectOne(FetchUserList.methode.name + '?amount=3&furthestUserId=1');
+      const listResponse2: FetchUserList.Response = {userList: sortedMock.slice(2, 5)};
+      request2.flush(listResponse2);
+
+      sub.next(3);
+      await secondProm;
+      expect(pointer).toEqual(5);
+
+      httpTestingController.verify();
+    });
+  });
 });

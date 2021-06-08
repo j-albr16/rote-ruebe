@@ -12,6 +12,10 @@ import {
 import {Injectable} from '@angular/core';
 import {map} from 'rxjs/operators';
 
+const isURLReady = (toCheck: any) => {
+  const type = typeof toCheck;
+  return type === 'string' || toCheck instanceof String || type === 'number' || type === 'boolean';
+}
 
 export function appHttpClientCreator(http: HttpClient): AppHttpClient {
   return new AppHttpClient(http);
@@ -31,7 +35,9 @@ export default class AppHttpClient {
     let params = new HttpParams();
 
     Object.keys(paramsObject).forEach(key => {
-      params = params.set(key, JSON.stringify(paramsObject[key]));
+      // if (paramsObject[key] !== undefined){}
+        params = params.set(key, isURLReady(paramsObject[key]) ? paramsObject[key] : JSON.stringify(paramsObject[key]));
+
     });
     return params;
   }
@@ -56,25 +62,14 @@ export default class AppHttpClient {
   }
 
   request<Req, Res, Queries>(methode: Methode<Req, Res, Queries>): (body: Req, params: Queries) => Observable<any> {
-    /*if (methode.httpType === HttpType.POST){
-      const func: <D, T, Q>(i: D, q: Q) => Observable<T> =
-        <D, T, Q>(body: D, params: Q) =>
-        this.http.post<T>(methode.name, body, {
-          responseType: 'json',
-          params: params ? AppHttpClient.convertParams(params) : null,
-        }).pipe(
-          map(data => data as T)
-        );
-      return methode.forming(func);
-    }*/
     const func: <D, T, Q>(i: D, q: Q) => Observable<T> =
-      <D, T, Q>(body: D, params?: Q) =>
-        this.http.request<T>(methode.httpType.toString(), methode.name, {
-          responseType: 'json',
-          body,
-          params: params ? AppHttpClient.convertParams(params) : null,
-        }).pipe(
-          map(data => data as T)
+        <D, T, Q>(body: D, params?: Q) =>
+          this.http.request<T>(methode.httpType.toString(), methode.name, {
+            responseType: 'json',
+            body,
+            params: params ? AppHttpClient.convertParams(params) : null,
+          }).pipe(
+            map(data => data as T)
         );
     return methode.forming(func);
   }

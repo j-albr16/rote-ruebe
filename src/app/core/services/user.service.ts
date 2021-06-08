@@ -16,7 +16,7 @@ import {DomainConverter} from '@core/utils/domain-converter';
   providedIn: 'root'
 })
 export class UserService {
-  userMap = new Map();
+  public userMap = new Map<string, User>();
 
   constructor(private http: AppHttpClient, private authService: AuthService) {
   }
@@ -25,7 +25,7 @@ export class UserService {
    * @return an Observable that emits the according User model for the given userId.
    */
   getUser(userId: string): Observable<User> {
-    if (this.userMap.get(userId) != null) {
+    if (this.userMap.get(userId) !== null && this.userMap.get(userId) !== undefined) {
       return new Observable<User>(sub => {
         sub.next(this.userMap.get(userId));
         sub.complete();
@@ -41,16 +41,17 @@ export class UserService {
    * @return an Observable that will emit requested User matching given UserFilter in the order defined by the UserFilter.
    * @return the Subject that lets you request more Users by emitting the wanted number.
    */
-  getUsers(filter: UserFilter): { observable: Observable<User>, subject: Subject<number> } {
+  getUserList(filter: UserFilter): { observable: Observable<User>, subject: Subject<number> } {
     const userSender = new MemorySubject<User>();
     const amountSender = new Subject<number>();
 
-    amountSender.pipe(
-      tap(amount => this.fetchUserList(filter, amount, userSender.latestValue?.id).pipe(
+    amountSender
+    .subscribe({
+      next: (amount) => this.fetchUserList(filter, amount, userSender.latestValue?.id).pipe(
         tap(user => this.userMap.set(user.id, user)),
-        map(user => userSender.next(user)),
-      ))
-    ).subscribe({complete: () => userSender.complete()});
+      ).subscribe(user => userSender.next(user)),
+      complete: () => userSender.complete()
+    });
     return {
       observable: userSender.asObservable(),
       subject: amountSender,

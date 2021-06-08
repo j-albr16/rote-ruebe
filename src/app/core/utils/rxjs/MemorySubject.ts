@@ -9,11 +9,11 @@ export default class MemorySubject<T> extends Subject<T>{
   }
 
   get latestValue(): T{
-    return this.latestValue;
+    return this.lastValue;
   }
 
   next(value: T): void{
-    super.next(value);
     this.lastValue = value;
+    super.next(value);
   }
 }
