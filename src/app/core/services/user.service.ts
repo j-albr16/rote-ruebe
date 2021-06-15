@@ -46,7 +46,7 @@ export class UserService {
 
     amountSender
     .subscribe({
-      next: (amount) => this.fetchUserList(filter, amount, userSender.latestValue?.id).pipe(
+      next: (amount) => this.fetchUserList(() => amountSender.complete(), filter, amount, userSender.latestValue?.id).pipe(
         tap(user => this.userMap.set(user.id, user)),
       ).subscribe(user => userSender.next(user)),
       complete: () => userSender.complete()
@@ -83,23 +83,27 @@ export class UserService {
 
   /**
    * Fetches the User model of given user weather or not it is already cached client side.
-   *  @return Observable either emits true and completes when the User is fetched or errors
+   *  @return Observable either emits the refreshed User and completes when the User is fetched or errors
    */
-  refreshUser(userId: string): Observable<boolean> {
+  refreshUser(userId: string): Observable<User> {
     this.userMap.delete(userId);
 
-    return this.getUser(userId).pipe(
-      map(value => true),
-    );
+    return this.getUser(userId);
   }
 
-  private fetchUserList(userFilter: UserFilter, amount: number, furthestUserId?: string): Observable<User>{
+  private fetchUserList(complete: () => void, userFilter: UserFilter, amount: number, furthestUserId?: string): Observable<User>{
     return this.http.request(FetchUserList.methode)({userFilter}, {amount, furthestUserId}).pipe(
       mergeMap((response: FetchUserList.Response) => {
+
         return from(response.userList).pipe(
           map(userResponse => {
             return DomainConverter.fromDto(User, userResponse);
-          })
+          }),
+          finalize(() => {
+            if (response.userList.length < amount) {
+              complete()
+            }
+          }),
         );
         })
     );
