@@ -1,13 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpParams} from '@angular/common/http';
 import {from, Observable, Subject} from 'rxjs';
-import {map, mergeMap, tap} from 'rxjs/operators';
+import {catchError, finalize, map, mergeMap, tap} from 'rxjs/operators';
 
 import {ChangeUser, FetchUserList, routes, Methode, UserFilter, UserRoutes, FetchUser} from 'rote-ruebe-types';
 
 import MemorySubject from '@core/utils/rxjs/MemorySubject';
 import User from '@core/models/user';
-import AppImage from '@core/models/app-image';
 import {AuthService} from '@core/services/auth.service';
 import AppHttpClient from '@core/utils/app-http-client';
 import {DomainConverter} from '@core/utils/domain-converter';
@@ -52,6 +51,16 @@ export class UserService {
       ).subscribe(user => userSender.next(user)),
       complete: () => userSender.complete()
     });
+
+    /*amountSender.pipe(
+      tap(amount => {
+        this.fetchUserList(filter, amount, userSender.latestValue?.id).pipe(
+          tap(user => this.userMap.set(user.id, user)),
+        ).subscribe(user => userSender.next(user))
+      }),
+      finalize( () => userSender.complete())
+    ).subscribe();
+    */
     return {
       observable: userSender.asObservable(),
       subject: amountSender,
@@ -86,10 +95,8 @@ export class UserService {
 
   private fetchUserList(userFilter: UserFilter, amount: number, furthestUserId?: string): Observable<User>{
     return this.http.request(FetchUserList.methode)({userFilter}, {amount, furthestUserId}).pipe(
-      mergeMap((value: FetchUserList.Response) => {
-        // const res = value as UserListResponse;
-        return from(value.userList).pipe(
-          // return from(res.userList).pipe(
+      mergeMap((response: FetchUserList.Response) => {
+        return from(response.userList).pipe(
           map(userResponse => {
             return DomainConverter.fromDto(User, userResponse);
           })

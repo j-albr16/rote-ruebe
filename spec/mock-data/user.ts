@@ -11,7 +11,7 @@ export const mock5User: IUser[] = [
       updatedAt: new Date('2020-04-22'),
       title: 'TestImage'
     },
-    userName: 'Timmy',
+    userName: 'Susan',
     createdAt:  new Date('2020-04-20'),
     updatedAt: new Date('2020-04-21'),
   },
@@ -24,7 +24,7 @@ export const mock5User: IUser[] = [
       updatedAt: new Date('2020-08-24'),
       title: 'TestImage'
     },
-    userName: 'Timmy',
+    userName: 'Kim',
     createdAt:  new Date('2020-04-23'),
     updatedAt: new Date('2020-05-13'),
   },
@@ -38,7 +38,7 @@ export const mock5User: IUser[] = [
       updatedAt: new Date('2020-12-18'),
       title: 'TestImage'
     },
-    userName: 'Timmy',
+    userName: 'Tom',
     createdAt: new Date('2019-04-20'),
     updatedAt: new Date('2019-04-20'),
   },
@@ -51,7 +51,7 @@ export const mock5User: IUser[] = [
       updatedAt: new Date('2021-04-20'),
       title: 'TestImage'
     },
-    userName: 'Timmy',
+    userName: 'Jens',
     createdAt:  new Date('2020-04-20'),
     updatedAt: new Date('2020-08-20'),
   },
@@ -64,7 +64,7 @@ export const mock5User: IUser[] = [
       updatedAt: new Date('2018-04-20'),
       title: 'TestImage'
     },
-    userName: 'Timmy',
+    userName: 'Josephine',
     createdAt:  new Date('2017-04-20'),
     updatedAt: new Date('2017-04-20'),
   }

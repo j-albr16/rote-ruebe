@@ -35,9 +35,9 @@ export default class AppHttpClient {
     let params = new HttpParams();
 
     Object.keys(paramsObject).forEach(key => {
-      // if (paramsObject[key] !== undefined){}
-        params = params.set(key, isURLReady(paramsObject[key]) ? paramsObject[key] : JSON.stringify(paramsObject[key]));
-
+       if (paramsObject[key] !== undefined && paramsObject[key] !== null){
+         params = params.set(key, isURLReady(paramsObject[key]) ? paramsObject[key] : JSON.stringify(paramsObject[key]));
+       }
     });
     return params;
   }
@@ -91,4 +91,3 @@ export default class AppHttpClient {
     });
   }
 }
-
