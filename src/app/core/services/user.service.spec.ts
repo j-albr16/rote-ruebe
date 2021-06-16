@@ -123,6 +123,8 @@ describe('UserService', () => {
 
       const request = httpTestingController.expectOne(ChangeUser.methode.name);
 
+      expect(request.request.body).toEqual(req);
+
       request.flush({});
       httpTestingController.verify();
     });
@@ -153,6 +155,14 @@ describe('UserService', () => {
       });
 
       const request = httpTestingController.expectOne(FetchUserList.methode.name);
+      expect(request.request.body).toEqual({
+        amount: 2,
+        furthestUserId: undefined,
+        userFilter: {
+          orderBy: OrderType.Alphabetical,
+        }
+      });
+
       const res: FetchUserList.Response = {
         userList: sortedMock.slice(0, 2)
       }
@@ -187,12 +197,27 @@ describe('UserService', () => {
       sub.next(2);
 
       const request = httpTestingController.expectOne(FetchUserList.methode.name);
+      expect(request.request.body).toEqual({
+        amount: 2,
+        furthestUserId: undefined,
+        userFilter: {
+          orderBy: OrderType.Alphabetical,
+        }
+      });
+
       const res: FetchUserList.Response = {
         userList: sortedMock.slice(0, 2)
       }
       request.flush(res);
 
       const request2 = httpTestingController.expectOne(FetchUserList.methode.name);
+      expect(request2.request.body).toEqual({
+        amount: 3,
+        furthestUserId: '4',
+        userFilter: {
+          orderBy: OrderType.Alphabetical,
+        }
+      });
       const res2: FetchUserList.Response = {
         userList: sortedMock.slice(2, 5)
       }
@@ -223,6 +248,14 @@ describe('UserService', () => {
       sub.next(5);
 
       const request = httpTestingController.expectOne(FetchUserList.methode.name);
+      expect(request.request.body).toEqual({
+        amount: 5,
+        furthestUserId: undefined,
+        userFilter: {
+          orderBy: OrderType.Alphabetical,
+        }
+      });
+
       const res: FetchUserList.Response = {
         userList: sortedMock.slice(0, 3)
       }
