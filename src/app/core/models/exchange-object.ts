@@ -3,6 +3,7 @@ import AppImage from './app-image';
 import User from './user';
 import {IAppImage, IExchangeObject, IUser} from 'rote-ruebe-types';
 import {DomainConverter} from '@core/utils/domain-converter';
+import {IHistoryEntry} from 'rote-ruebe-types/src/method-interfaces/index';
 
 
 export default class ExchangeObject implements IExchangeObject {
@@ -15,7 +16,9 @@ export default class ExchangeObject implements IExchangeObject {
   public get exchangeWay(): string { return this.state.exchangeWay };
   public get expiryDate(): Date { return this.state.expiryDate };
   public get b_free(): boolean { return this.state.b_free };
+  public get b_completed(): boolean { return this.state.b_completed };
   public get b_anonymous(): boolean { return this.state.b_anonymous };
+  public get history(): IHistoryEntry[] { return this.state.history }; // TODO History Entry should be a class in client i think
   public get provider(): User { return DomainConverter.fromDto(User, this.state.provider) }; // anonymous possible
   public get imageList(): AppImage[] { return this.state.imageList.map(iAppImage => DomainConverter.fromDto(AppImage, iAppImage)) };
   public get createdAt(): Date { return this.state.createdAt };

@@ -4,11 +4,11 @@ import {Observable, of} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {
   AuthRoutes,
-  LogIn,
+  Login,
   RequestResetPassword,
   ResetPassword,
-  SignUp,
-  TryAutoLogIn,
+  Signup,
+  TryAutoLogin,
 } from 'rote-ruebe-types';
 import AppHttpClient from '@core/utils/app-http-client';
 import { DomainConverter } from '@core/utils/domain-converter';
@@ -60,12 +60,12 @@ export class AuthService {
     if (!token || !userId) {
       return;
     }
-    const userData: TryAutoLogIn.Request = {
+    const userData: TryAutoLogin.Request = {
       id: userId,
       loginToken: token,
     };
 
-    this.http.post<TryAutoLogIn.Response>(AuthRoutes.TryAutoLogIn, userData).subscribe(
+    this.http.post<TryAutoLogin.Response>(AuthRoutes.TryAutoLogin, userData).subscribe(
       (user) => {
         this.user = DomainConverter.fromDto(User, user);
       },
@@ -79,8 +79,8 @@ export class AuthService {
    * Log In http Request. False => ErrorList. Valid => Auth User Model with Token
    * @param userData email password
    */
-  public logIn(userData: LogIn.Request): Observable<string | null> {
-    return this.http.post<LogIn.Response>(AuthRoutes.LogIn, userData).pipe(
+  public logIn(userData: Login.Request): Observable<string | null> {
+    return this.http.post<Login.Response>(AuthRoutes.Login, userData).pipe(
       tap(data => {
         this.user = DomainConverter.fromDto(User, data);
       }),
@@ -91,8 +91,8 @@ export class AuthService {
    * Making API Call to create new User Model
    * @param user User Data for new User. UserName, Password, ConfirmPassword, Email
    */
-  public singUp(user: SignUp.Request): Observable<string | null> {
-    return this.http.post<null>(AuthRoutes.SignUp, user).pipe(
+  public singUp(user: Signup.Request): Observable<string | null> {
+    return this.http.post<null>(AuthRoutes.Signup, user).pipe(
       catchError<null, Observable<string | null>>(err => of(err))
     );
   }
