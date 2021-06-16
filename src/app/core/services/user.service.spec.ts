@@ -5,25 +5,28 @@ import User from '@core/models/user';
 import {DomainConverter} from '@core/utils/domain-converter';
 import {mock5User} from '../../../../spec/mock-data/user';
 import AppHttpClient from '@core/utils/app-http-client';
-import {FetchUser, FetchUserList, IUser, OrderType} from 'rote-ruebe-types';
+import {ChangeUser, FetchUser, FetchUserList, IUser, OrderType, UserFilter} from 'rote-ruebe-types';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {DevLogInterceptor} from '@core/interceptor/dev-log.interceptor';
-import {from, Observable, of} from 'rxjs';
+import {from, Observable, of, Subject} from 'rxjs';
 import {map, mergeMap} from 'rxjs/operators';
 import {ErrorInterceptor} from '@core/interceptor/error.interceptor';
+import {AuthService} from '@core/services/auth.service';
+
+
 
 describe('UserService', () => {
   let userService: UserService;
   let appHttpClient: AppHttpClient;
+  let authService: AuthService;
   let httpTestingController: HttpTestingController;
   let mockIUserList: IUser[];
   let mockIUser: IUser;
-  let mockIUser2: IUser;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
-      providers: [ UserService, AppHttpClient,
+      providers: [ UserService, AppHttpClient, AuthService,
         {
           provide: HTTP_INTERCEPTORS,
           useClass: DevLogInterceptor,
@@ -32,6 +35,7 @@ describe('UserService', () => {
         ]
     });
     userService = TestBed.inject(UserService);
+    authService = TestBed.inject(AuthService);
     appHttpClient = TestBed.inject(AppHttpClient);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
@@ -40,7 +44,6 @@ describe('UserService', () => {
 
     beforeEach(() => {
       mockIUser = mock5User[0];
-      mockIUser2 = mock5User[1];
     });
 
     it('should fetch User from Mock', done => {
@@ -56,11 +59,12 @@ describe('UserService', () => {
     });
 
     it('should get cached User without fetching', done => {
-      userService.userMap = new Map<string, User>();
-      userService.userMap.set('1', DomainConverter.fromDto(User, mockIUser2));
+      const testUserMap = new Map<string, User>();
+      testUserMap.set('0', DomainConverter.fromDto(User, mockIUser));
+      userService.initUserMap(testUserMap);
 
-      userService.getUser('1').subscribe((user) => {
-        expect(user).toEqual(DomainConverter.fromDto(User, mockIUser2));
+      userService.getUser('0').subscribe((user) => {
+        expect(user).toEqual(DomainConverter.fromDto(User, mockIUser));
         done();
       });
 
@@ -75,14 +79,15 @@ describe('UserService', () => {
   describe('refreshUser', () => {
 
     beforeEach(() => {
-      mockIUser2 = mock5User[1];
+      mockIUser = mock5User[1];
     });
 
     it('should fetch cached User on refreshUser()', done => {
-      userService.userMap = new Map<string, User>();
-      userService.userMap.set('1', DomainConverter.fromDto(User, mockIUser2));
+      const testUserMap = new Map<string, User>();
+      testUserMap.set('1', DomainConverter.fromDto(User, mockIUser));
+      userService.initUserMap(testUserMap);
 
-      const changedMock = JSON.parse(JSON.stringify(mockIUser2));
+      const changedMock = JSON.parse(JSON.stringify(mockIUser));
       changedMock.description = 'New Description like there never was';
 
       userService.refreshUser('1').subscribe((user) => {
@@ -94,6 +99,31 @@ describe('UserService', () => {
       const request = httpTestingController.expectOne(FetchUser.methode.name + '?userId=1');
 
       request.flush(changedMock);
+      httpTestingController.verify();
+    });
+  });
+
+  describe('changeUser', () => {
+
+    beforeEach(() => {
+      mockIUser = mock5User[0];
+    });
+
+    it('should post a changed User', done => {
+      const req: ChangeUser.Request = {
+        userId: mockIUser.id,
+        userName: mockIUser.userName,
+        description: mockIUser.description,
+        image: mockIUser.image
+      }
+      userService.changeMyUser(req).subscribe((success) => {
+        expect(success).toBeTrue();
+        done();
+      });
+
+      const request = httpTestingController.expectOne(ChangeUser.methode.name);
+
+      request.flush({});
       httpTestingController.verify();
     });
   });
@@ -122,7 +152,7 @@ describe('UserService', () => {
         }
       });
 
-      const request = httpTestingController.expectOne(FetchUserList.methode.name + '?amount=2');
+      const request = httpTestingController.expectOne(FetchUserList.methode.name);
       const res: FetchUserList.Response = {
         userList: sortedMock.slice(0, 2)
       }
@@ -156,13 +186,13 @@ describe('UserService', () => {
 
       sub.next(2);
 
-      const request = httpTestingController.expectOne(FetchUserList.methode.name + '?amount=2');
+      const request = httpTestingController.expectOne(FetchUserList.methode.name);
       const res: FetchUserList.Response = {
         userList: sortedMock.slice(0, 2)
       }
       request.flush(res);
 
-      const request2 = httpTestingController.expectOne(FetchUserList.methode.name + '?amount=3&furthestUserId=4');
+      const request2 = httpTestingController.expectOne(FetchUserList.methode.name);
       const res2: FetchUserList.Response = {
         userList: sortedMock.slice(2, 5)
       }
@@ -192,7 +222,7 @@ describe('UserService', () => {
 
       sub.next(5);
 
-      const request = httpTestingController.expectOne(FetchUserList.methode.name + '?amount=5');
+      const request = httpTestingController.expectOne(FetchUserList.methode.name);
       const res: FetchUserList.Response = {
         userList: sortedMock.slice(0, 3)
       }
@@ -201,6 +231,28 @@ describe('UserService', () => {
 
       httpTestingController.verify();
     });
+  });
+
+  describe('getMyUser', () => {
+    let spy: any;
+
+    beforeEach(() => {
+      mockIUser = mock5User[0];
+      spy = spyOnProperty(authService, 'userId', 'get').and.returnValue(mockIUser.id);
+    });
+
+    it('should return User by UserId of authservice', done => {
+      const initUserMap = new Map<string, User>();
+      initUserMap.set(mockIUser.id, DomainConverter.fromDto(User, mockIUser));
+      userService.initUserMap(initUserMap);
+
+      userService.getMyUser().subscribe(user => {
+        expect(user).toEqual(DomainConverter.fromDto(User, mockIUser));
+        done();
+      });
+
+      expect(spy).toHaveBeenCalled();
+    })
   });
 
 });

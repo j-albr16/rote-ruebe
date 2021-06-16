@@ -11,13 +11,18 @@ import {AuthService} from '@core/services/auth.service';
 import AppHttpClient from '@core/utils/app-http-client';
 import {DomainConverter} from '@core/utils/domain-converter';
 
+
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
-  public userMap = new Map<string, User>();
+export class UserService{
+  private userMap = new Map<string, User>();
 
   constructor(private http: AppHttpClient, private authService: AuthService) {
+  }
+
+  initUserMap(initUserMap: Map<string, User>): void{
+    this.userMap = initUserMap;
   }
 
   /**
@@ -77,8 +82,8 @@ export class UserService {
   /**
    * @return Observable either emits true and completes when the server accepts the change or errors
    */
-  changeMyUser(changedUserBody: ChangeUser.Request, changedUserQueries: ChangeUser.Queries): Observable<boolean> {
-    return this.http.request(ChangeUser.methode)(changedUserBody, changedUserQueries).pipe(map(value => true));
+  changeMyUser(changedUserBody: ChangeUser.Request): Observable<boolean> {
+    return this.http.request(ChangeUser.methode)(changedUserBody, null).pipe(map(() => true));
   }
 
   /**
@@ -92,7 +97,7 @@ export class UserService {
   }
 
   private fetchUserList(complete: () => void, userFilter: UserFilter, amount: number, furthestUserId?: string): Observable<User>{
-    return this.http.request(FetchUserList.methode)({userFilter}, {amount, furthestUserId}).pipe(
+    return this.http.request(FetchUserList.methode)({userFilter, amount, furthestUserId}, null).pipe(
       mergeMap((response: FetchUserList.Response) => {
 
         return from(response.userList).pipe(
