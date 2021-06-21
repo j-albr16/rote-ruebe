@@ -1,4 +1,3 @@
-import {staticImplements} from './model-helper';
 import {IAppImage} from 'rote-ruebe-types';
 
 

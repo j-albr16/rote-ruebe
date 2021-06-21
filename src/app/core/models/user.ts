@@ -1,5 +1,5 @@
 import AppImage from './app-image';
-import {IAppImage, IUser} from 'rote-ruebe-types';
+import {IUser} from 'rote-ruebe-types';
 import {DomainConverter} from '@core/utils/domain-converter';
 
 

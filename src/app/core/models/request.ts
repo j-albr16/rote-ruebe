@@ -1,11 +1,9 @@
-import {staticImplements} from './model-helper';
-import type ExchangeObject from './exchange-object';
 import {IRequest, Status} from 'rote-ruebe-types';
 import User from '@core/models/user';
 import {DomainConverter} from '@core/utils/domain-converter';
 
 
-export default class Request implements IRequest{
+export default class Request implements IRequest{ // TODO make two Request models inherited from this (IncomingRequests, OutgoingRequests)
   public get id(): string { return this.state.id };
   public get amount(): number { return this.state.amount };
   public get number(): number { return this.state.number };

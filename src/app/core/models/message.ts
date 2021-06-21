@@ -1,5 +1,4 @@
-import {staticImplements} from './model-helper';
-import {IMessage, IUser} from 'rote-ruebe-types';
+import {IMessage} from 'rote-ruebe-types';
 import {DomainConverter} from '@core/utils/domain-converter';
 import User from '@core/models/user';
 

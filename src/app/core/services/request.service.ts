@@ -11,13 +11,11 @@ export class RequestService {
 
   constructor(private http: HttpClient) { }
 
-  getIncomingRequests(object?: ExchangeObject): {observable: Observable<Request>, newRequests: Observable<Request>}{
+  getIncomingRequests(object?: ExchangeObject): {observable: Observable<Request>, newest: Observable<Request>}{
     return;
   }
 
-  // TODO maybe IncomingRequest and OutgoingRequest as two extentions of Request to be clear (since incoming can be read)
-
-  getOutgoingRequests(): {observable: Observable<Request>, newRequests: Observable<Request>}{
+  getOutgoingRequests(): {observable: Observable<Request>, newest: Observable<Request>}{
     return;
   }
 

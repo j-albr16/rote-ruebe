@@ -16,7 +16,7 @@ export class ExchangeObjectService {
     return;
   }
 
-  getNewExchangeObjects(): { observable: Observable<ExchangeObject>, subject: Subject<number>, newObjects: Observable<ExchangeObject> }{
+  getNewestExchangeObjects(): { observable: Observable<ExchangeObject>, subject: Subject<number>, newest: Observable<ExchangeObject> }{
     return;
   }
 }

@@ -1,5 +1,4 @@
-
-import {IComment, IUser} from 'rote-ruebe-types';
+import {IComment} from 'rote-ruebe-types';
 import User from '@core/models/user';
 import {DomainConverter} from '@core/utils/domain-converter';
 
@@ -15,4 +14,3 @@ export default class Comment implements IComment {
   constructor(private state: IComment) {
   }
 }
-

@@ -10,7 +10,7 @@ export class CommentService {
 
   constructor(private http: HttpClient) {}
 
-    getComments(object: ExchangeObject): {observable: Observable<Comment>, subject: Subject<number>, newComments: Comment} {
+    getComments(object: ExchangeObject): {observable: Observable<Comment>, subject: Subject<number>, newest: Comment} {
       return;
     }
 
