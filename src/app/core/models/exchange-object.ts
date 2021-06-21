@@ -1,8 +1,7 @@
 import AppImage from './app-image';
 import User from './user';
-import {IExchangeObject} from 'rote-ruebe-types';
+import {IExchangeObject, IHistoryEntry} from 'rote-ruebe-types';
 import {DomainConverter} from '@core/utils/domain-converter';
-import {IHistoryEntry} from 'rote-ruebe-types/src/method-interfaces/index';
 
 
 export default class ExchangeObject implements IExchangeObject {
