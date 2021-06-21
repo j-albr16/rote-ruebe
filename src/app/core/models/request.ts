@@ -11,7 +11,7 @@ export default class Request implements IRequest{
   public get number(): number { return this.state.number };
   public get text(): string { return this.state.text };
   public get sender(): User { return DomainConverter.fromDto(User, this.state.sender) };
-  // public get receiver(): string { return this.state.receiver }; // TODO Second model for outgoing Request or oversight?
+  // public get receiver(): string { return this.state.receiver }; // TODO will get IExchangeObject to retrieve receiver and id
   public get exchangeObjectId(): string { return this.state.exchangeObjectId };
   public get createdAt(): Date { return this.state.createdAt };
   public get read(): boolean { return this.state.read };

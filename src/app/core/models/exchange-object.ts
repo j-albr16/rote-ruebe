@@ -18,7 +18,7 @@ export default class ExchangeObject implements IExchangeObject {
   public get b_free(): boolean { return this.state.b_free };
   public get b_completed(): boolean { return this.state.b_completed };
   public get b_anonymous(): boolean { return this.state.b_anonymous };
-  public get history(): IHistoryEntry[] { return this.state.history }; // TODO History Entry should be a class in client i think
+  public get history(): IHistoryEntry[] { return this.state.history }; // TODO History Entry should be a class in client
   public get provider(): User { return DomainConverter.fromDto(User, this.state.provider) }; // anonymous possible
   public get imageList(): AppImage[] { return this.state.imageList.map(iAppImage => DomainConverter.fromDto(AppImage, iAppImage)) };
   public get createdAt(): Date { return this.state.createdAt };
