@@ -18,7 +18,7 @@ export class CommentService {
       return;
     }
 
-    sendComment(comment: Comment): Observable<boolean>{
+    sendComment(comment: Comment): Observable<Comment>{
       return;
     }
 

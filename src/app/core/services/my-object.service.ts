@@ -20,7 +20,7 @@ export class MyObjectService {
     return;
   }
 
-  createObject(newObject: ExchangeObject): Observable<boolean>{
+  createObject(newObject: ExchangeObject): Observable<ExchangeObject>{
     return;
   }
 

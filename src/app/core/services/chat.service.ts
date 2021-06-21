@@ -32,7 +32,7 @@ export class ChatService {
     return;
   }
 
-  sendMessage(message: Message): Observable<boolean> {
+  sendMessage(message: Message): Observable<Message> {
     return;
   }
 }

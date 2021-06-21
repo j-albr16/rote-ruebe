@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
 import ExchangeObject from '@core/models/exchange-object';
-import {RespondToRequest} from 'rote-ruebe-types';
+import {RespondToRequest, SendRequest} from 'rote-ruebe-types';
 import {HttpClient} from '@angular/common/http';
+import {IncomingRequest, OutgoingRequest} from '@core/models/request';
 
 @Injectable({
   providedIn: 'root'
@@ -11,19 +12,19 @@ export class RequestService {
 
   constructor(private http: HttpClient) { }
 
-  getIncomingRequests(object?: ExchangeObject): {observable: Observable<Request>, newest: Observable<Request>}{
+  getIncomingRequests(object?: ExchangeObject): {observable: Observable<IncomingRequest>, newest: Observable<IncomingRequest>}{
     return;
   }
 
-  getOutgoingRequests(): {observable: Observable<Request>, newest: Observable<Request>}{
+  getOutgoingRequests(): {observable: Observable<OutgoingRequest>, newest: Observable<OutgoingRequest>}{
     return;
   }
 
-  respondToRequest(responseRequest: RespondToRequest.Request): Observable<boolean>{
+  respondToRequest(responseRequest: RespondToRequest.Request): Observable<Request>{
     return;
   }
 
-  sendRequest(request: Request): Observable<boolean>{
+  sendRequest(request: SendRequest.Request): Observable<Request>{
     return;
   }
 }

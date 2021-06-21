@@ -17,5 +17,5 @@ export default class Request implements IRequest{
   constructor(private state: IRequest) {}
 }
 
-export class OutgoingRequests extends Request{}
-export class IncomingRequests extends Request{}
+export class OutgoingRequest extends Request{}
+export class IncomingRequest extends Request{}

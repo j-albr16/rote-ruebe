@@ -82,8 +82,11 @@ export class UserService{
   /**
    * @return Observable either emits true and completes when the server accepts the change or errors
    */
-  changeMyUser(changedUserBody: ChangeUser.Request): Observable<boolean> {
-    return this.http.request(ChangeUser.methode)(changedUserBody, null).pipe(map(() => true));
+  changeMyUser(changedUserBody: ChangeUser.Request): Observable<User> {
+    return this.http.request(ChangeUser.methode)(changedUserBody, null).pipe(
+      map((userResponse: FetchUser.Response) =>
+        DomainConverter.fromDto(User, userResponse))
+    );
   }
 
   /**
