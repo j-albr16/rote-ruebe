@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {from, Observable, Subject} from 'rxjs';
-import {finalize, map, mergeMap, tap} from 'rxjs/operators';
+import {from, Observable, of, Subject} from 'rxjs';
+import {catchError, finalize, map, mergeMap, tap} from 'rxjs/operators';
 
 import {ChangeUser, FetchUserList, UserFilter, FetchUser} from 'rote-ruebe-types';
 
@@ -84,7 +84,11 @@ export class UserService{
   changeMyUser(changedUserBody: ChangeUser.Request): Observable<User> {
     return this.http.request(ChangeUser.methode)(changedUserBody).pipe(
       map((userResponse: FetchUser.Response) =>
-        DomainConverter.fromDto(User, userResponse))
+        DomainConverter.fromDto(User, userResponse)),
+      catchError((error, obs) => {
+        console.error(error.error.message);
+        return obs;
+      })
     );
   }
 
@@ -112,7 +116,11 @@ export class UserService{
             }
           }),
         );
-        })
+        }),
+      catchError((error, obs) => {
+        console.error(error.error.message);
+        return obs;
+      })
     );
   }
 
@@ -120,7 +128,11 @@ export class UserService{
   private fetchUser(userId: string): Observable<User> {
     return this.http.request(FetchUser.methode)({userId}).pipe(
       map((userResponse: FetchUser.Response) =>
-      DomainConverter.fromDto(User, userResponse))
+        DomainConverter.fromDto(User, userResponse)),
+      catchError((error, obs) => {
+        console.error(error.error.message);
+        return obs;
+      })
     );
   }
 
