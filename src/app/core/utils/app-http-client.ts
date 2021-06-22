@@ -1,21 +1,14 @@
-import {HttpClient, HttpParams, HttpRequest, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {
-  ChatRoutes,
-  FetchUserList,
-  RouterEnums,
-  URLArgs,
-  URLType,
-  UserFilter,
-  Methode, HttpType
-} from 'rote-ruebe-types';
+import {HttpType, Methode, RouterEnums, URLType} from 'rote-ruebe-types';
 import {Injectable} from '@angular/core';
 import {map} from 'rxjs/operators';
 
 const isURLReady = (toCheck: any) => {
   const type = typeof toCheck;
-  return type === 'string' || toCheck instanceof String || type === 'number' || type === 'boolean';
-}
+  const shouldBeType =  'string' || 'number' || 'boolean';
+  return type === shouldBeType || toCheck instanceof String;
+};
 
 export function appHttpClientCreator(http: HttpClient): AppHttpClient {
   return new AppHttpClient(http);
@@ -34,7 +27,8 @@ export default class AppHttpClient {
   static convertParams(paramsObject: { [key: string]: any }): HttpParams {
     let params = new HttpParams();
 
-    Object.keys(paramsObject).forEach(key => {
+    Object.keys(paramsObject)
+      .forEach(key => {
        if (paramsObject[key] !== undefined && paramsObject[key] !== null){
          params = params.set(key, isURLReady(paramsObject[key]) ? paramsObject[key] : JSON.stringify(paramsObject[key]));
        }
@@ -61,16 +55,18 @@ export default class AppHttpClient {
     return queryString;
   }
 
-  request<Req, Res, Queries>(methode: Methode<Req, Res, Queries>): (body: Req, params: Queries) => Observable<any> {
-    const func: <D, T, Q>(i: D, q: Q) => Observable<T> =
-        <D, T, Q>(body: D, params?: Q) =>
-          this.http.request<T>(methode.httpType.toString(), methode.name, {
+  request<Req, Res>(methode: Methode<Req, Res>): (body: Req) => Observable<any> {
+    const func: <D, T>(i: D) => Observable<T> =
+        <D, T>(body: D) => {
+          const isGet = methode.httpType === HttpType.GET;
+          return this.http.request<T>(methode.httpType.toString(), methode.name, {
             responseType: 'json',
-            body,
-            params: params ? AppHttpClient.convertParams(params) : null,
+            body: !isGet ? body : null,
+            params: isGet ? AppHttpClient.convertParams(body) : null,
           }).pipe(
             map(data => data as T)
-        );
+          );
+        };
     return methode.forming(func);
   }
 

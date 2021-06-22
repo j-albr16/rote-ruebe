@@ -5,12 +5,10 @@ import User from '@core/models/user';
 import {DomainConverter} from '@core/utils/domain-converter';
 import {mock5User} from '../../../../spec/mock-data/user';
 import AppHttpClient from '@core/utils/app-http-client';
-import {ChangeUser, FetchUser, FetchUserList, IUser, OrderType, UserFilter} from 'rote-ruebe-types';
+import {ChangeUser, FetchUser, FetchUserList, IUser, OrderType} from 'rote-ruebe-types';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {DevLogInterceptor} from '@core/interceptor/dev-log.interceptor';
-import {from, Observable, of, Subject} from 'rxjs';
-import {map, mergeMap} from 'rxjs/operators';
-import {ErrorInterceptor} from '@core/interceptor/error.interceptor';
+import {Observable} from 'rxjs';
 import {AuthService} from '@core/services/auth.service';
 
 
@@ -115,9 +113,9 @@ describe('UserService', () => {
         userName: mockIUser.userName,
         description: mockIUser.description,
         image: mockIUser.image
-      }
-      userService.changeMyUser(req).subscribe((success) => {
-        expect(success).toBeTrue();
+      };
+      userService.changeMyUser(req).subscribe((user) => {
+        expect(user).toEqual(DomainConverter.fromDto(User, mockIUser));
         done();
       });
 
@@ -125,7 +123,7 @@ describe('UserService', () => {
 
       expect(request.request.body).toEqual(req);
 
-      request.flush({});
+      request.flush(mockIUser);
       httpTestingController.verify();
     });
   });
@@ -165,7 +163,7 @@ describe('UserService', () => {
 
       const res: FetchUserList.Response = {
         userList: sortedMock.slice(0, 2)
-      }
+      };
       request.flush(res);
 
 
@@ -207,7 +205,7 @@ describe('UserService', () => {
 
       const res: FetchUserList.Response = {
         userList: sortedMock.slice(0, 2)
-      }
+      };
       request.flush(res);
 
       const request2 = httpTestingController.expectOne(FetchUserList.methode.name);
@@ -220,7 +218,7 @@ describe('UserService', () => {
       });
       const res2: FetchUserList.Response = {
         userList: sortedMock.slice(2, 5)
-      }
+      };
       request2.flush(res2);
 
 
@@ -258,7 +256,7 @@ describe('UserService', () => {
 
       const res: FetchUserList.Response = {
         userList: sortedMock.slice(0, 3)
-      }
+      };
       request.flush(res);
 
 
@@ -274,7 +272,7 @@ describe('UserService', () => {
       spy = spyOnProperty(authService, 'userId', 'get').and.returnValue(mockIUser.id);
     });
 
-    it('should return User by UserId of authservice', done => {
+    it('should return User by UserId of authService', done => {
       const initUserMap = new Map<string, User>();
       initUserMap.set(mockIUser.id, DomainConverter.fromDto(User, mockIUser));
       userService.initUserMap(initUserMap);
