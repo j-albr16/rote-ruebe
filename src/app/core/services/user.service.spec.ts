@@ -114,8 +114,8 @@ describe('UserService', () => {
         description: mockIUser.description,
         image: mockIUser.image
       };
-      userService.changeMyUser(req).subscribe((success) => {
-        expect(success).toBeTrue();
+      userService.changeMyUser(req).subscribe((user) => {
+        expect(user).toEqual(DomainConverter.fromDto(User, mockIUser));
         done();
       });
 
@@ -123,7 +123,7 @@ describe('UserService', () => {
 
       expect(request.request.body).toEqual(req);
 
-      request.flush({});
+      request.flush(mockIUser);
       httpTestingController.verify();
     });
   });
