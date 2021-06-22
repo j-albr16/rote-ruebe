@@ -3,7 +3,6 @@ import User from '@core/models/user';
 import {Observable, of} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {
-  AuthRoutes,
   Login,
   RequestResetPassword,
   ResetPassword,
@@ -56,7 +55,7 @@ export class AuthService {
    */
   public tryAutoLogin(): Promise<void> {
     const token = null; // this.cookieService.getCookie(COOKIES.TOKEN);
-    const userId = null // this.cookieService.getCookie(COOKIES.USER_ID);
+    const userId = null; // this.cookieService.getCookie(COOKIES.USER_ID);
     if (!token || !userId) {
       return;
     }
@@ -65,7 +64,7 @@ export class AuthService {
       loginToken: token,
     };
 
-    this.http.post<TryAutoLogin.Response>(AuthRoutes.TryAutoLogin, userData).subscribe(
+    this.http.request(TryAutoLogin.methode)(userData).subscribe(
       (user) => {
         this.user = DomainConverter.fromDto(User, user);
       },
@@ -80,7 +79,7 @@ export class AuthService {
    * @param userData email password
    */
   public logIn(userData: Login.Request): Observable<string | null> {
-    return this.http.post<Login.Response>(AuthRoutes.Login, userData).pipe(
+    return this.http.request(Login.methode)(userData).pipe(
       tap(data => {
         this.user = DomainConverter.fromDto(User, data);
       }),
@@ -92,7 +91,7 @@ export class AuthService {
    * @param user User Data for new User. UserName, Password, ConfirmPassword, Email
    */
   public singUp(user: Signup.Request): Observable<string | null> {
-    return this.http.post<null>(AuthRoutes.Signup, user).pipe(
+    return this.http.request(Signup.methode)(user).pipe(
       catchError<null, Observable<string | null>>(err => of(err))
     );
   }
@@ -102,7 +101,7 @@ export class AuthService {
    * @param user Email
    */
   public requestResetPassword(user: RequestResetPassword.Request): Observable<string | null> {
-    return this.http.post<null>(AuthRoutes.RequestResetPassword, user).pipe(
+    return this.http.request(RequestResetPassword.methode)(user).pipe(
       catchError<null, Observable<string | null>>(err => of(err))
     );
   }
@@ -112,7 +111,7 @@ export class AuthService {
    * @param user Password and Confirm Password.
    */
   public resetPassword(user: ResetPassword.Request): Observable<string | null> {
-    return this.http.post<null>(AuthRoutes.ResetPassword, user).pipe(
+    return this.http.request(ResetPassword.methode)(user).pipe(
       catchError<null, Observable<string | null>>(err => of(err))
     );
   }

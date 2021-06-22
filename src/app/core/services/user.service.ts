@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpParams} from '@angular/common/http';
 import {from, Observable, Subject} from 'rxjs';
-import {catchError, finalize, map, mergeMap, tap} from 'rxjs/operators';
+import {finalize, map, mergeMap, tap} from 'rxjs/operators';
 
-import {ChangeUser, FetchUserList, routes, Methode, UserFilter, UserRoutes, FetchUser} from 'rote-ruebe-types';
+import {ChangeUser, FetchUserList, UserFilter, FetchUser} from 'rote-ruebe-types';
 
 import MemorySubject from '@core/utils/rxjs/MemorySubject';
 import User from '@core/models/user';
@@ -83,7 +82,7 @@ export class UserService{
    * @return Observable either emits true and completes when the server accepts the change or errors
    */
   changeMyUser(changedUserBody: ChangeUser.Request): Observable<User> {
-    return this.http.request(ChangeUser.methode)(changedUserBody, null).pipe(
+    return this.http.request(ChangeUser.methode)(changedUserBody).pipe(
       map((userResponse: FetchUser.Response) =>
         DomainConverter.fromDto(User, userResponse))
     );
@@ -100,7 +99,7 @@ export class UserService{
   }
 
   private fetchUserList(complete: () => void, userFilter: UserFilter, amount: number, furthestUserId?: string): Observable<User>{
-    return this.http.request(FetchUserList.methode)({userFilter, amount, furthestUserId}, null).pipe(
+    return this.http.request(FetchUserList.methode)({userFilter, amount, furthestUserId}).pipe(
       mergeMap((response: FetchUserList.Response) => {
 
         return from(response.userList).pipe(
@@ -119,7 +118,7 @@ export class UserService{
 
 
   private fetchUser(userId: string): Observable<User> {
-    return this.http.request(FetchUser.methode)(null, {userId}).pipe(
+    return this.http.request(FetchUser.methode)({userId}).pipe(
       map((userResponse: FetchUser.Response) =>
       DomainConverter.fromDto(User, userResponse))
     );
