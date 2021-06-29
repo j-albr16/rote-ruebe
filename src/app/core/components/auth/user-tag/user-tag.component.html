@@ -1,0 +1,9 @@
+<div class="user-tag">
+  <img *ngIf="image != null; else altIcon" alt="none" [src]="image" class="user-tag__image"/>
+  <ng-template #altIcon>
+    <mat-icon class="user-tag__svg">{{userSvg}}</mat-icon>
+  </ng-template>
+  <p class="user-tag__username">
+    {{userName}}
+  </p>
+</div>

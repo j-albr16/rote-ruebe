@@ -1,0 +1,25 @@
+@use 'sass:map';
+@import "styles";
+
+.button {
+  display: block;
+  text-align: center;
+  padding: map.get($padding, medium);
+
+  background-color: map.get($color, primary);
+
+  color: map.get($color, onPrimary);
+  font-size: map.get($fontSize, subtitle);
+  font-weight: map.get($fontWeight, medium);
+
+  box-shadow: $shadow;
+
+  &:hover {
+    color: map.get($color, onPrimaryVariant);
+  }
+
+  &.disabled {
+    color: map.get($color, onPrimaryVariant);
+    background-color: map.get($color, primaryVariant);
+  }
+}

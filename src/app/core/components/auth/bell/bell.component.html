@@ -1,0 +1,26 @@
+<div class="bell">
+
+  <div class="bell__count">
+    {{notificationCount}}
+  </div>
+
+  <mat-icon class="bell__icon" (click)="switchOpen()" #bell>
+    {{bellIcon}}
+  </mat-icon>
+
+
+  <div *ngIf="open" class="bell__notification">
+    <!--    <div class="backdrop" (click)="switchOpen()">-->
+
+    <div class="bell__notification--triangle">
+    </div>
+
+    <div class="bell__notification--list">
+      <div class="bell__notification--item">
+      </div>
+    </div>
+
+    <!--    </div>-->
+  </div>
+</div>
+

@@ -1,0 +1,51 @@
+@use 'sass:map';
+@import "styles";
+
+$userImageSize: map.get($fontSize, huge);
+.user-tag {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+
+  color: map.get($color, onPrimary);
+
+  &:hover {
+    color: map.get($color, onPrimaryVariant);
+  }
+
+  .user-tag__svg {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    font-size: $userImageSize;
+    width: $userImageSize;
+    height: $userImageSize;
+    padding: map.get($padding, little) 10px;
+  }
+
+  .user-tag__image {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: map.get($padding, little) 10px;
+
+    width: $userImageSize;
+    height: $userImageSize;
+    border-radius: 50%;
+  }
+
+  .user-tag__username {
+    display: block;
+
+    font-size: map.get($fontSize, subtitle);
+    font-weight: map.get($fontWeight, medium);
+    margin: 0;
+    padding: map.get($padding, little) 10px;
+
+
+  }
+
+
+}
