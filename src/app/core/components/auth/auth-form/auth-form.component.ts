@@ -12,13 +12,6 @@ export enum AuthState {
   ResetPassword
 }
 
-export class AuthErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
-}
-
 @Component({
   selector: 'app-auth-form',
   templateUrl: './auth-form.component.html',
@@ -26,12 +19,7 @@ export class AuthErrorStateMatcher implements ErrorStateMatcher {
 })
 export class AuthFormComponent implements OnChanges {
   @Input() authState: AuthState;
-  @ViewChild('f') myNgForm;
-
-  // Form Helper
-  public floatLabelControl = new FormControl('auto');
-  public hideRequiredControl = new FormControl(false);
-  public matcher = new AuthErrorStateMatcher();
+  @ViewChild('f') myNgForm: NgForm;
 
   // Actual Form Data
   public errorMessage: string;
@@ -40,6 +28,7 @@ export class AuthFormComponent implements OnChanges {
   get authForm(): FormGroup {
     return this.dynamicForm?.form;
   }
+
 
   // State Dependant Form Fields
   authStateMask = {
@@ -167,6 +156,11 @@ export class AuthFormComponent implements OnChanges {
 
   private resetForm(): void {
     this.myNgForm.resetForm();
+  }
+
+  isErrorState(control: AbstractControl): boolean {
+    const isSubmitted = this.myNgForm && this.myNgForm.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted))
   }
 
   /**

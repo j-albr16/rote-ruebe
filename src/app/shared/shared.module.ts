@@ -1,22 +1,28 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
-import {RouterModule, Routes} from '@angular/router';
+import {RouterModule} from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
-// import {ImageUploadComponent} from './components/image/image-upload/image-upload.component';
-// import {FileDragDropComponent} from './components/image/file-drag-drop/file-drag-drop.component';
+import {SvgComponent} from './components/svg/svg.component';
+import {PrimaryButtonComponent} from './components/primary-button/primary-button.component';
+import { ClickOutsideDirective } from './Directives/click-outside.directive';
 
 
 @NgModule({
-  declarations: [/* ImageUploadComponent, FileDragDropComponent */],
+  declarations: [
+    SvgComponent, PrimaryButtonComponent, ClickOutsideDirective
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  exports: [
-    RouterModule,
-  ],
+    exports: [
+        RouterModule,
+        SvgComponent,
+        PrimaryButtonComponent,
+        ClickOutsideDirective,
+    ],
 })
 export class SharedModule {
 }

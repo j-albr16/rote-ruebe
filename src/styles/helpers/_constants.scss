@@ -1,42 +1,45 @@
-@import "~@angular/material/theming";
+@use 'sass:map';
 
 $color: (
-  primary: #5d9125,
-  primaryVariant: #9ccb51,
-  secondary: #bfab21,
-  secondaryVariant: #e0c977,
-  onSurface: black,
-  onSurfaceVariant: grey,
-  onPrimary: white,
-  onSecondary: white,
-  onError: white,
-  error: red,
-  valid: green,
+  primary: #EB8585,
+  primaryVariant: #D97F7F,
+  onPrimary: #FFF3F3,
+  onPrimaryVariant: #ACA4A4,
+  onSurface: #676767,
+  onSurfaceVariant: #ACA4A4,
+  onError: #FFF3F3,
+  error: #EB2F2F,
+  valid: #2CA42A,
   surface: white,
 );
 
-$text: (
-  size: (
-    body: 14px,
-    subtitle: 20px,
-    headline: 30px,
-  ),
-  thickness: (
-    thin: normal,
-    medium: 600,
-    thick: bold,
-  ),
+$fontSize: (
+  hint: 8px,
+  body: 12px,
+  subtitle: 18px,
+  headline: 24px,
+  huge: 40px,
 );
 
-$border: (
-  thin: 5px,
-  thick: 10px,
+$fontWeight: (
+  thin: normal,
+  regular: 500,
+  medium: 600,
+  thick: bold,
 );
 
-$borderRadius: 15px;
+$borderWidth: (
+  thin: 1px,
+  medium: 3px,
+  thick: 5px,
+);
+
+$borderRadius: 6px;
 
 $padding: (
-  little: 15px,
-  medium: 30px,
-  large: 65px,
+  little: 20px,
+  medium: 40px,
+  large: 80px,
 );
+
+$shadow: 3px 4px 4px rgba(0, 0, 0, 0.25);

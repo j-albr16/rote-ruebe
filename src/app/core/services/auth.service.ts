@@ -10,7 +10,8 @@ import {
   TryAutoLogin,
 } from 'rote-ruebe-types';
 import AppHttpClient from '@core/utils/app-http-client';
-import { DomainConverter } from '@core/utils/domain-converter';
+import {DomainConverter} from '@core/utils/domain-converter';
+
 // import {COOKIES, CookieService} from '@core/services/cookie.service';
 
 
@@ -22,8 +23,8 @@ export function authFactory(authService: AuthService): () => Promise<void> {
   providedIn: 'root'
 })
 export class AuthService {
-  private user: User;
-  private loginToken: string;
+  private _loginToken: string;
+  private _userId: string;
 
   constructor(private http: AppHttpClient) { // private cookieService: CookieService
   }
@@ -32,21 +33,21 @@ export class AuthService {
    * Retrieving Userid from authenticated User Model
    */
   get userId(): string {
-    return this.user.id;
+    return this._userId;
   }
 
   /**
    * Checking Whether Auth Token is Available in Auth User Model
    */
   get isAuth(): boolean {
-    return !!this.loginToken;
+    return !!this._loginToken;
   }
 
   /**
    * Get Auth String for API Authentication
    */
   getAuth(): string {
-    return this.user?.id + ':' + this.loginToken;
+    return this._userId + ':' + this._loginToken;
   }
 
   /**
@@ -65,8 +66,9 @@ export class AuthService {
     };
 
     this.http.request(TryAutoLogin.methode)(userData).subscribe(
-      (user) => {
-        this.user = DomainConverter.fromDto(User, user);
+      (authData) => {
+        this._loginToken = authData.loginToken;
+        this._userId = authData.id;
       },
       err => {
         if (err) return;
@@ -81,7 +83,8 @@ export class AuthService {
   public logIn(userData: Login.Request): Observable<string | null> {
     return this.http.request(Login.methode)(userData).pipe(
       tap(data => {
-        this.user = DomainConverter.fromDto(User, data);
+        this._userId = data.id;
+        this._loginToken = data.loginToken;
       }),
       catchError<null, Observable<string | null>>(err => of(err)));
   }

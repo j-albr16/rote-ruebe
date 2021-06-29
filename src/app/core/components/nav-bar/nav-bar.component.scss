@@ -1,41 +1,57 @@
 @use "sass:map";
 @import "styles";
 
+
+
 .nav-bar {
   display: flex;
-  //background: #5d9125;
-  background: radial-gradient(circle, map.get($color, secondary) 17%, map.get($color, primary) 89%);
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-evenly;
+  position: fixed;
 
-  .nav-bar__list {
-    flex: 1 1 auto;
+  background-color: map.get($color, primary);
+  box-shadow: $shadow;
+  margin: 0;
+  list-style: none;
+  width: 100%;
+
+
+  .nav-bar__item {
     display: flex;
     flex-direction: row;
-
-    list-style: none;
-    width: 100%;
-    margin: 0;
-    padding: 10px;
-
     align-items: center;
-    align-content: space-evenly;
+    justify-content: space-evenly;
 
+    padding: 0 map.get($padding, little);
     color: map.get($color, onPrimary);
 
-    .nav-bar__list--item {
-      &:hover {
-        background-color: map.get($color, primaryVariant);
-      }
+    &:hover {
+      color: map.get($color, onPrimaryVariant);
+    }
 
-      &.router-link-active {
-        background-color: map.get($color, primaryVariant);
-      }
-
+    .nav-bar__item--text {
       display: block;
-      padding: 10px 20px;
+      font-size: map.get($fontSize, subtitle);
+      font-weight: map.get($fontWeight, regular);
 
+      padding: map.get($padding, medium) 8px;
+      margin: 0;
+    }
+
+    .nav-bar__item--svg {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      height: map.get($fontSize, subtitle);
+      width: map.get($fontSize, subtitle);
+
+      padding: map.get($padding, medium) 8px;
 
     }
   }
+
+
 }
 
 .spacer {

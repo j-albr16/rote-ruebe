@@ -1,19 +1,28 @@
-<nav class="nav-bar">
+<ul class="nav-bar">
 
-  <ul class="nav-bar__list">
+  <li class="nav-bar__item">
+    <!--    <app-svg [svgKey]="homeIcon" class="nav-bar__item&#45;&#45;svg"></app-svg>-->
+    <mat-icon>{{grassIcon}}</mat-icon>
+    <svg-icon src="assets/svg/delete_black_24dp.svg" class="nav-bar__item--svg"></svg-icon>
+  </li>
 
-    <li *ngFor="let navBarEntry of navBarData" class="nav-bar__list--item" [routerLink]="navBarEntry.path"
-        routerLinkActive="router-link-active">{{navBarEntry.name}}</li>
+  <li *ngFor="let navBarEntry of navBarData" class="nav-bar__item" [routerLink]="navBarEntry.path"
+      routerLinkActive="router-link-active">
+    <mat-icon class="nav-bar__item--svg">{{navBarEntry.icon}}</mat-icon>
+    <p class="nav-bar__item--text">
+      {{navBarEntry.name}}
+    </p>
+  </li>
 
-    <li class="spacer">
-    </li>
+  <li class="spacer">
+  </li>
 
-    <app-profile-menu class="nav-bar__list--profile gab">
-      Profile Thing
-    </app-profile-menu>
+  <app-bell class="nav-bar__item"></app-bell>
 
-  </ul>
+  <li class="nav-bar__item">
+    <app-user-tag></app-user-tag>
+  </li>
 
-</nav>
+</ul>
 
 <router-outlet></router-outlet>

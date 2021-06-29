@@ -6,3 +6,7 @@
   }
   @return $result;
 }
+
+@function imgSize($fontSize, $padding) {
+  @return $fontSize + ( $padding / 2 )
+}

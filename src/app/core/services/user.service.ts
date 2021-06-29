@@ -14,14 +14,22 @@ import {DomainConverter} from '@core/utils/domain-converter';
 @Injectable({
   providedIn: 'root'
 })
-export class UserService{
+export class UserService {
   private userMap = new Map<string, User>();
+  private _authUser: User;
 
   constructor(private http: AppHttpClient, private authService: AuthService) {
   }
 
-  initUserMap(initUserMap: Map<string, User>): void{
+  initUserMap(initUserMap: Map<string, User>): void {
     this.userMap = initUserMap;
+  }
+
+  get authUser(): Observable<User> {
+    if (this._authUser) {
+      return of(this._authUser);
+    }
+    return this.getMyUser();
   }
 
   /**
@@ -49,12 +57,12 @@ export class UserService{
     const amountSender = new Subject<number>();
 
     amountSender
-    .subscribe({
-      next: (amount) => this.fetchUserList(() => amountSender.complete(), filter, amount, userSender.latestValue?.id).pipe(
-        tap(user => this.userMap.set(user.id, user)),
-      ).subscribe(user => userSender.next(user)),
-      complete: () => userSender.complete()
-    });
+      .subscribe({
+        next: (amount) => this.fetchUserList(() => amountSender.complete(), filter, amount, userSender.latestValue?.id).pipe(
+          tap(user => this.userMap.set(user.id, user)),
+        ).subscribe(user => userSender.next(user)),
+        complete: () => userSender.complete()
+      });
 
     /*amountSender.pipe(
       tap(amount => {
@@ -102,7 +110,7 @@ export class UserService{
     return this.getUser(userId);
   }
 
-  private fetchUserList(complete: () => void, userFilter: UserFilter, amount: number, furthestUserId?: string): Observable<User>{
+  private fetchUserList(complete: () => void, userFilter: UserFilter, amount: number, furthestUserId?: string): Observable<User> {
     return this.http.request(FetchUserList.methode)({userFilter, amount, furthestUserId}).pipe(
       mergeMap((response: FetchUserList.Response) => {
 
@@ -116,7 +124,7 @@ export class UserService{
             }
           }),
         );
-        }),
+      }),
       catchError((error, obs) => {
         console.error(error.error.message);
         return obs;

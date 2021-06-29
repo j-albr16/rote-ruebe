@@ -13,6 +13,10 @@ export class AuthPageComponent implements OnInit {
   constructor(private route: ActivatedRoute) {
   }
 
+  get b_logIn(): boolean {
+    return this.authState === AuthState.LogIn;
+  }
+
   setAuthState(authState: keyof typeof AuthState = null): void {
     if (authState) {
       this.authState = AuthState[authState];

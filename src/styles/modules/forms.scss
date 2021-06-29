@@ -1,64 +1,60 @@
 @use "sass:map";
 @import "src/styles/helpers/constants";
 
-.form-wrapper {
-  width: 100%;
+.input--wrapper {
   display: flex;
-  justify-self: center;
-  justify-content: center;
-  &:hover {
-    background: linear-gradient(0% map.get($color,secondary),100% map.get($color,primary));
-  }
-  .form-element {
-    display: flex;
-    flex-direction: column;
-    border-radius: 5px;
-    padding: 10px;
-    justify-content: start;
-    width: 50%;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+
+  .input {
+
+    .input__label {
+      display: block;
+      padding: map.get($padding, medium);
+      color: map.get($color, onSurface);
+
+      font-weight: map.get($fontWeight, medium);
+      font-size: map.get($fontSize, subtitle);
+      font-style: normal;
+    }
+
+    .input__text {
+      display: block;
+
+      padding: map.get($padding, medium);
+      background: map.get($color, surface);
+
+      border-style: solid;
+      border-width: map.get($borderWidth, medium);
+      border-radius: $borderRadius;
+
+      font-size: map.get($fontSize, body);
+      color: map.get($color, surface);
+      font-weight: map.get($fontWeight, normal);
+      border-color: map.get($color, surface);
+
+      &.is-error-state {
+        border-color: map.get($color, error);
+      }
+    }
   }
 
-  label {
-    font-size: 12px;
-    font-weight: bold;
+  .input__errors {
     display: flex;
     flex-direction: column;
-    padding: 5px;
-  }
-
-  .text-field, .text-area {
-    display: flex;
-    flex-direction: column;
-    padding: 5px;
-    border-radius: 10px;
-    border-color: map.get($color, primary);
-  }
-
-  .check-box {
-    display: inline-flex;
-    flex-direction: row;
+    list-style: none;
     justify-content: space-evenly;
-  }
+    align-items: flex-start;
 
-  .form {
-    flex-direction: column;
-    display: flex;
-    width: 70%;
-    align-self: center;
-    justify-content: space-evenly;
-    border: 5px solid black;
-    justify-self: center;
-    //align-content: center;
-    //align-self: center;
-  }
+    .input__error {
+      display: block;
+      padding: map.get($padding, little);
 
-  input.ng-valid, textarea.ng-valid {
-    //@extend .text-field;
-    border-left: map.get($border, thin) solid map.get($color, valid);
-  }
-
-  input.ng-invalid, textarea.ng-invalid {
-    //@extend .text-field;
-    border-left: map.get($border, thin) solid map.get($color, error);
+      font-size: map.get($fontSize, body);
+      color: map.get($color, error);
+      font-weight: map.get($fontWeight, normal);
+    }
   }
 }
+

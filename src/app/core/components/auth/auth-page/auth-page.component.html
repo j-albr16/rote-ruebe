@@ -2,20 +2,20 @@
 
   <div class="auth-page">
 
-    <ul class="auth-page__nav">
-      <li class="auth-page__nav--item" [ngClass]="{'selected': isAuthState('LogIn')}" (click)="setAuthState('LogIn')">
-        Log In
-      </li>
-      <li class="auth-page__nav--item" [ngClass]="{'selected': isAuthState('SignIn')}" (click)="setAuthState('SignIn')">
-        Sign Up
-      </li>
-    </ul>
+    <h1 class="auth-page__title">
+      {{b_logIn ? 'Sign Up' : 'Log In'}}
+    </h1>
 
     <app-auth-form [authState]="authState" class="auth-page__form">
     </app-auth-form>
 
-    <p class="auth-page__forget" (click)="setAuthState('RequestResetPassword')">
-      Forget Password ?
-    </p>
+    <div class="auth-page__button-bar">
+      <app-primary-button (click)="b_logIn ? setAuthState('SignIn') : setAuthState('LogIn')" class="auth-page__button">
+        {{!b_logIn ? 'Sign Up' : 'Log In'}}
+      </app-primary-button>
+      <p class="auth-page__forget" (click)="setAuthState('RequestResetPassword')">
+        Forget Password ?
+      </p>
+    </div>
   </div>
 </div>

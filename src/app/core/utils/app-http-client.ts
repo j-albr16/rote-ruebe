@@ -55,7 +55,7 @@ export default class AppHttpClient {
     return queryString;
   }
 
-  request<Req, Res>(methode: Methode<Req, Res>): (body: Req) => Observable<any> {
+  request<Req, Res>(methode: Methode<Req, Res>): (body: Req) => Observable<Res> {
     const func: <D, T>(i: D) => Observable<T> =
         <D, T>(body: D) => {
           const isGet = methode.httpType === HttpType.GET;

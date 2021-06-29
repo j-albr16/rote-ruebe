@@ -1,34 +1,29 @@
 <form [formGroup]="authForm" (ngSubmit)="submit()" #f="ngForm" class="form">
 
-  <ng-container *ngIf="errorMessage != null">
-    <p>
-      {{errorMessage}}
-    </p>
-  </ng-container>
+  <!--  Form Field-->
+  <div *ngFor="let formField of formFieldList" class="form__field">
 
-  <!--                  Iterating through Each Form Field for Current Auth State-->
-  <mat-form-field *ngFor="let formField of formFieldList"
-                  appearance="fill" [floatLabel]="floatLabelControl.value"
-                  [hideRequiredMarker]="hideRequiredControl.value" class="form__field">
+    <!--    Input Field with Label-->
+    <div class="form__field--input">
+      <label class="form__field--input__label">{{formField}}</label>
 
-    <!--    Creating A Label for Form Field-->
-    <mat-label>
-      {{formField}}
-    </mat-label>
+      <input [ngClass]="{'is-error-state': isErrorState(authForm.get(formField))}" class="form__field--input__text"
+             [placeholder]="dynamicFormData.get(formField).hint"
+             [type]="dynamicFormData.get(formField).inputType" [formControlName]="formField">
 
-    <!--    Input with Hint and Input Type-->
-    <input matInput placeholder="{{this.dynamicFormData.get(formField).hint}}"
-           type="{{this.dynamicFormData.get(formField).inputType}}" [formControlName]="formField"
-           [errorStateMatcher]="matcher">
+    </div>
 
-    <!--    Displaying Errors if ErrorStateMatcher Triggers-->
-    <mat-error *ngFor="let invalidKey of authForm.get(formField).errors?.valueOf() | keyvalue">
-      {{this.dynamicFormData.get(formField).messages[invalidKey.key]}}
-    </mat-error>
+    <!--    Errors-->
+    <div class="form__field--errors" *ngIf="isErrorState(authForm.get(formField))">
 
-  </mat-form-field>
+      <p class="form__field--errors__item"
+         *ngFor="let invalidKey of authForm.get(formField).errors?.valueOf() | keyvalue">
+        {{this.dynamicFormData.get(formField).messages[invalidKey.key]}}
+      </p>
 
-  <!--  Submit Button-->
-  <button mat-raised-button type="submit" class="button" [disabled]="authForm.invalid">Submit</button>
+    </div>
+
+    <app-primary-button [disabled]="authForm.invalid">Submit</app-primary-button>
+  </div>
 
 </form>

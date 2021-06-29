@@ -1,5 +1,5 @@
 @use "sass:map";
-@import "src/styles/styles";
+@import "styles";
 
 .form {
   display: flex;
@@ -12,11 +12,27 @@
 
 
   .form__field {
+    @extend .input--wrapper;
 
-    display: block;
-    width: 60%;
-    padding: map.get($padding, little);
-    border-radius: $borderRadius;
+    .form__field--input {
+      @extend .input;
+
+      .form__field--input__label {
+        @extend .input__label;
+      }
+
+      .form__field--input__text {
+        @extend .input__text;
+      }
+    }
+
+    .form__field--errors {
+      @extend .input__errors;
+
+      .form__field--errors__item {
+        @extend .input__error;
+      }
+    }
   }
 
   .button {
