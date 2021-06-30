@@ -12,9 +12,10 @@ import ExchangeObject from '@core/models/exchange-object';
 import {Observable, Subject} from 'rxjs';
 import {DomainConverter} from '@core/utils/domain-converter';
 import User from '@core/models/user';
-import {Socket} from 'socket.io-client';
+import {io, Socket} from 'socket.io-client';
 import MockedSocket from 'socket.io-mock';
 import NewComment = CommentSocket.NewComment;
+import {Mock} from 'protractor/built/driverProviders';
 
 describe('CommentService', () => {
   let commentService: CommentService;
@@ -39,6 +40,27 @@ describe('CommentService', () => {
     appHttpClient = TestBed.inject(AppHttpClient);
     httpTestingController = TestBed.inject(HttpTestingController);
     mockCommentList = mockICommentList;
+  });
+
+  describe('Socket checks', () => {
+    let mockSocket: MockedSocket = new MockedSocket();
+    beforeEach(() => {
+      mockSocket = new MockedSocket();
+    });
+
+    it('should init custom Socket', done => {
+      commentService.initCustomIo(mockSocket);
+
+      const eventName = 'custom-socket-test';
+      const mockString = 'Mock test emit';
+      commentService.commentSocket.on(eventName, (testString: string) => {
+        expect(testString).toEqual(mockString);
+        done();
+      });
+      mockSocket.clientSocket.emit(eventName, mockString);
+    });
+
+
   });
 
   describe('getComments', () => {
@@ -222,6 +244,22 @@ describe('CommentService', () => {
   });
 
   describe('getCommentCount', () => {
+      let obs: Observable<{exchangeObjectId: string, amount: number, comment: Comment}>;
+      let mockSocket: MockedSocket = new MockedSocket();
+      beforeEach(() => {
+        mockSocket = new MockedSocket();
+        commentService.initCustomIo(mockSocket);
+        obs = commentService.getUnreadCommentCount();
+      });
+
+      it('should fetch unreadComment with http', done => {});
+
+      it('should get unreadCommentCount without fetching (cache)', done => {});
+
+      it('should get new unreadComment with socket io', () => {});
+
+      it('should get unreadComment{amount: 0}', () => {});
+
 
   });
 

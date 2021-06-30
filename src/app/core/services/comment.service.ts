@@ -8,10 +8,13 @@ import {Socket} from 'socket.io-client';
   providedIn: 'root'
 })
 export class CommentService {
+    public commentSocket: Socket;
 
   constructor(private http: HttpClient) {}
 
     initCustomIo(socket: Socket): void{}
+
+    initUnreadMap(initMap: Map<string, {amount: number, comment?: Comment}>): void{}
 
     getComments(object: ExchangeObject): {observable: Observable<Comment>, subject: Subject<number>, newest: Observable<Comment>} {
       return;
@@ -25,7 +28,7 @@ export class CommentService {
       return;
     }
 
-    getUnreadCommentCount(): Observable<{ exchangeObjectId: string, amount: number }>{
+    getUnreadCommentCount(): Observable<{ exchangeObjectId: string, amount: number, comment: Comment }>{
       return;
     }
 }
