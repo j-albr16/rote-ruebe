@@ -35,7 +35,7 @@ export const initSpaceSocket = <ClientEvents extends SocketEntries, ServerEvents
 (space: SocketSpace<ClientEvents, ServerEvents>, auth?: {token: string}, testIo?: Socket):
   InitReturnType<ServerEvents> => {
 
-  const spaceSocket = testIo ?? io('http://localhost:3000' + space.path, {
+  const spaceSocket = testIo ?? io(space.path, {
     auth
   });
 
