@@ -262,6 +262,69 @@ describe('UserService', () => {
 
       httpTestingController.verify();
     });
+
+    it('should replay Users when subscribing again later', (done) => {
+      const obsSub = userService.getUserList({orderBy: OrderType.Alphabetical});
+      const obs: Observable<User> = obsSub.observable;
+      const sub = obsSub.subject;
+
+      const sortedMock = mockIUserList.sort((one, two) => (one.userName > two.userName ? 1 : -1));
+
+      let pointer = 0;
+      let pointer2 = 0;
+      obs.subscribe((user) => {
+        expect(user).toEqual(DomainConverter.fromDto(User, sortedMock[pointer]));
+
+        pointer++;
+
+        if (pointer === 2){
+          obs.subscribe((user2) => {
+            expect(user2).toEqual(DomainConverter.fromDto(User, sortedMock[pointer2]));
+            pointer2++;
+            if (pointer2 === 5 && pointer === 5) {
+              done()
+            }
+          });
+          sub.next(3);
+        }
+
+        if (pointer === 5 && pointer2 === 5){
+          done();
+        }
+      });
+
+      sub.next(2);
+
+      const request = httpTestingController.expectOne(FetchUserList.methode.name);
+      expect(request.request.body).toEqual({
+        amount: 2,
+        furthestUserId: undefined,
+        userFilter: {
+          orderBy: OrderType.Alphabetical,
+        }
+      });
+
+      const res: FetchUserList.Response = {
+        userList: sortedMock.slice(0, 2)
+      };
+      request.flush(res);
+
+      const request2 = httpTestingController.expectOne(FetchUserList.methode.name);
+      expect(request2.request.body).toEqual({
+        amount: 3,
+        furthestUserId: '4',
+        userFilter: {
+          orderBy: OrderType.Alphabetical,
+        }
+      });
+      const res2: FetchUserList.Response = {
+        userList: sortedMock.slice(2, 5)
+      };
+      request2.flush(res2);
+
+
+      httpTestingController.verify();
+    })
   });
 
   describe('getMyUser', () => {

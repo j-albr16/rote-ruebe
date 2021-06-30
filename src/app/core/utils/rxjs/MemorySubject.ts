@@ -1,6 +1,6 @@
-import {Subject} from 'rxjs';
+import {ReplaySubject} from 'rxjs';
 
-export default class MemorySubject<T> extends Subject<T>{
+export default class MemorySubject<T> extends ReplaySubject<T>{
   private lastValue?: T;
 
   constructor() {

@@ -69,4 +69,4 @@ export const mock5User: IUser[] = [
     updatedAt: new Date('2017-04-20'),
   }
 
-]
+];

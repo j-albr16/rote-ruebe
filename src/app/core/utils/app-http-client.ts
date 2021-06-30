@@ -1,6 +1,6 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {HttpType, Methode, RouterEnums, URLType} from 'rote-ruebe-types';
+import {HttpType, Methode, MethodRouterEnums, URLType} from 'rote-ruebe-types';
 import {Injectable} from '@angular/core';
 import {map} from 'rxjs/operators';
 
@@ -70,7 +70,7 @@ export default class AppHttpClient {
     return methode.forming(func);
   }
 
-  post<Res, ReqBody = any>(routeKey: RouterEnums, body: ReqBody, queries: { [key: string]: any } = null, b_progress = false)
+  post<Res, ReqBody = any>(routeKey: MethodRouterEnums, body: ReqBody, queries: { [key: string]: any } = null, b_progress = false)
     : Observable<Res> {
     const url = `${routeKey}${AppHttpClient.generateQueries(queries)}`;
     return this.http.post<Res>(url, body, {
@@ -79,7 +79,7 @@ export default class AppHttpClient {
     });
   }
 
-  get<Res, ReqBody = any>(routeKey: RouterEnums, queries: { [key: string]: any } = null, b_progress = false): Observable<Res> {
+  get<Res, ReqBody = any>(routeKey: MethodRouterEnums, queries: { [key: string]: any } = null, b_progress = false): Observable<Res> {
     const url = `${routeKey}${AppHttpClient.generateQueries(queries)}`;
     return this.http.get<Res>(url, {
       // params: AppHttpClient.convertParams(params),

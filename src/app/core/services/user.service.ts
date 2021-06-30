@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {from, Observable, of, Subject} from 'rxjs';
+import {from, Observable, of, ReplaySubject, Subject} from 'rxjs';
 import {catchError, finalize, map, mergeMap, tap} from 'rxjs/operators';
 
 import {ChangeUser, FetchUserList, UserFilter, FetchUser} from 'rote-ruebe-types';
@@ -45,14 +45,19 @@ export class UserService{
    * @return the Subject that lets you request more Users by emitting the wanted number.
    */
   getUserList(filter: UserFilter): { observable: Observable<User>, subject: Subject<number> } {
-    const userSender = new MemorySubject<User>();
+    const userSender = new ReplaySubject<User>();
     const amountSender = new Subject<number>();
+    let furthestUser: User = null;
 
     amountSender
     .subscribe({
-      next: (amount) => this.fetchUserList(() => amountSender.complete(), filter, amount, userSender.latestValue?.id).pipe(
+      next: (amount) => this.fetchUserList(() => amountSender.complete(), filter, amount, furthestUser?.id).pipe(
         tap(user => this.userMap.set(user.id, user)),
-      ).subscribe(user => userSender.next(user)),
+      ).subscribe(user => {
+
+        furthestUser = user;
+        userSender.next(user);
+      }),
       complete: () => userSender.complete()
     });
 
