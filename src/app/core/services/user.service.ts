@@ -61,15 +61,6 @@ export class UserService{
       complete: () => userSender.complete()
     });
 
-    /*amountSender.pipe(
-      tap(amount => {
-        this.fetchUserList(filter, amount, userSender.latestValue?.id).pipe(
-          tap(user => this.userMap.set(user.id, user)),
-        ).subscribe(user => userSender.next(user))
-      }),
-      finalize( () => userSender.complete())
-    ).subscribe();
-    */
     return {
       observable: userSender.asObservable(),
       subject: amountSender,
