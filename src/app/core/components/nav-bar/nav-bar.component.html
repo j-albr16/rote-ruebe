@@ -2,18 +2,8 @@
 
   <ul class="nav-bar__list">
 
-    <li class="nav-bar__list--item" routerLink="/exchange-object-form" routerLinkActive="router-link-active">
-      Exchange Objects
-    </li>
-    <li class="nav-bar__list--item" routerLink="/dashboard" routerLinkActive="router-link-active">
-      Dashboard
-    </li>
-    <li class="nav-bar__list--item" routerLink="/social" routerLinkActive="router-link-active">
-      Social
-    </li>
-    <li class="nav-bar__list--item" routerLink="/auth" routerLinkActive="router-link-active">
-      Auth
-    </li>
+    <li *ngFor="let navBarEntry of navBarData" class="nav-bar__list--item" [routerLink]="navBarEntry.path"
+        routerLinkActive="router-link-active">{{navBarEntry.name}}</li>
 
     <li class="spacer">
     </li>
@@ -26,4 +16,4 @@
 
 </nav>
 
-<router-outlet ftflexfill=""></router-outlet>
+<router-outlet></router-outlet>
