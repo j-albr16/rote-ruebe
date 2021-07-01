@@ -1,9 +1,7 @@
 <ul class="nav-bar">
 
-  <li class="nav-bar__item">
-    <!--    <app-svg [svgKey]="homeIcon" class="nav-bar__item&#45;&#45;svg"></app-svg>-->
+  <li *ngIf="isAuth" class="nav-bar__item">
     <mat-icon>{{grassIcon}}</mat-icon>
-    <svg-icon src="assets/svg/delete_black_24dp.svg" class="nav-bar__item--svg"></svg-icon>
   </li>
 
   <li *ngFor="let navBarEntry of navBarData" class="nav-bar__item" [routerLink]="navBarEntry.path"
@@ -17,7 +15,7 @@
   <li class="spacer">
   </li>
 
-  <app-bell class="nav-bar__item"></app-bell>
+  <app-bell *ngIf="isAuth" class="nav-bar__item"></app-bell>
 
   <li class="nav-bar__item">
     <app-user-tag></app-user-tag>
@@ -25,4 +23,3 @@
 
 </ul>
 
-<router-outlet></router-outlet>

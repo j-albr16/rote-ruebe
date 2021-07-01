@@ -5,12 +5,20 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: space-evenly;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+
+  padding-top: $navBarSize;
 
   .auth-page__title {
-    display: block;
-    padding: map.get($padding, medium);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0;
 
+    padding: map.get($padding, medium);
     font-size: map.get($fontSize, headline);
     font-weight: map.get($fontWeight, thick);
     color: map.get($color, onSurface);
@@ -24,21 +32,28 @@
   .auth-page__button-bar {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
+    width: 100%;
+    padding: 0 map.get($padding, medium);
 
     .auth-page__forget {
+      display: flex;
+      flex-grow: 3;
+      justify-content: center;
+
       color: map.get($color, onSurface);
       font-size: map.get($fontSize, subtitle);
       font-weight: map.get($fontWeight, thin);
-      text-underline: map.get($color, onSurface);
+      text-decoration-style: solid;
+      text-decoration-color: map.get($color, onSurface);
+      text-decoration-line: underline;
     }
 
     .auth-page__button {
-      display: block;
-      padding: map.get($padding, medium);
+      display: flex;
+      flex-grow: 5;
     }
   }
-
 }
 

@@ -5,7 +5,7 @@ import {RouterModule} from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
 import {SvgComponent} from './components/svg/svg.component';
 import {PrimaryButtonComponent} from './components/primary-button/primary-button.component';
-import { ClickOutsideDirective } from './Directives/click-outside.directive';
+import { ClickOutsideDirective } from './Directives/utils/click-outside.directive';
 
 
 @NgModule({
@@ -15,7 +15,7 @@ import { ClickOutsideDirective } from './Directives/click-outside.directive';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    HttpClientModule,
+    HttpClientModule
   ],
     exports: [
         RouterModule,

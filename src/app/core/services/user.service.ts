@@ -138,7 +138,7 @@ export class UserService {
       map((userResponse: FetchUser.Response) =>
         DomainConverter.fromDto(User, userResponse)),
       catchError((error, obs) => {
-        console.error(error.error.message);
+        console.error(error);
         return obs;
       })
     );

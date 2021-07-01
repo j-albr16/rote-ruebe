@@ -3,15 +3,19 @@
 
 .input--wrapper {
   display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 
   .input {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
 
     .input__label {
       display: block;
-      padding: map.get($padding, medium);
+      padding: map.get($padding, medium) 0;
       color: map.get($color, onSurface);
 
       font-weight: map.get($fontWeight, medium);
@@ -29,10 +33,10 @@
       border-width: map.get($borderWidth, medium);
       border-radius: $borderRadius;
 
-      font-size: map.get($fontSize, body);
-      color: map.get($color, surface);
+      font-size: map.get($fontSize, normal);
+      color: map.get($color, onSurface);
       font-weight: map.get($fontWeight, normal);
-      border-color: map.get($color, surface);
+      border-color: map.get($color, onSurface);
 
       &.is-error-state {
         border-color: map.get($color, error);

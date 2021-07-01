@@ -1,0 +1,20 @@
+<div class="bar">
+
+  <div class="bar__filter">
+    <mat-icon [ngClass]="{'filter-mode': b_filter}" class="bar__filter--icon"
+              (click)="switchFilterMode()">{{filterIcon}}</mat-icon>
+    <p *ngIf="b_filter" class="bar__filter--text">Filter Mode</p>
+  </div>
+
+  <input *ngIf="b_filter" class="bar__input" type="text" placeholder="Search" #searchInput
+         (change)="searchEvent()">
+
+  <div class="bar__spacer"></div>
+
+  <div class="bar__view-mode">
+    <mat-icon [ngClass]="{'selected': b_listMode}" class="bar__view-mode--icon"
+              (click)="setListMode('List')">{{listIcon}}</mat-icon>
+    <mat-icon [ngClass]="{'selected': !b_listMode}" class="bar__view-mode--icon"
+              (click)="setListMode('Wrap')">{{gridIcon}}</mat-icon>
+  </div>
+</div>

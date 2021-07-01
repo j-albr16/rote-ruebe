@@ -1,0 +1,21 @@
+@use 'sass:map';
+@import "styles";
+
+.home-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-grow: 1;
+
+  padding-top: $navBarSize;
+
+  .home-page__top-bar {
+    width: 100%;
+
+
+
+  }
+
+
+}
+

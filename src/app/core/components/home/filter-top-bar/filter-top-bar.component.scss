@@ -1,0 +1,69 @@
+@use 'sass:map';
+@import "styles";
+
+.bar {
+  @include generalFlex;
+  flex-direction: row;
+
+  background-color: map.get($color, onSurface);
+
+  .bar__filter {
+    @include generalFlex;
+    flex-direction: column;
+
+    padding: map.get($padding, little) map.get($padding, medium);
+
+    .bar__filter--icon {
+      @include generalFlex;
+      color: map.get($color, onPrimary);
+      // Icon Size
+      font-size: 30px;
+      width: 40px;
+      height: 40px;
+
+      &.filter-mode {
+        color: map.get($color, valid);
+      }
+    }
+
+    .bar__filter--text {
+      color: map.get($color, onPrimary);
+      font-size: map.get($fontSize, body);
+      margin: 0
+    }
+  }
+
+  .bar__input {
+    width: 300px;
+    padding: map.get($padding, little);
+
+    color: map.get($color, onPrimaryVariant);
+    border-radius: $borderRadius;
+  }
+
+  .bar__spacer {
+    display: flex;
+    flex-grow: 1;
+  }
+
+  .bar__view-mode {
+    @include generalFlex;
+    padding: map.get($padding, little);
+
+    .bar__view-mode--icon {
+      @include generalFlex;
+      color: map.get($color, onPrimary);
+      padding: map.get($padding, little);
+
+      // Icon Size
+      font-size: 30px;
+      width: 40px;
+      height: 40px;
+
+      &.selected {
+        color: map.get($color, onPrimaryVariant);
+        border: solid map.get($color, onPrimaryVariant) map.get($borderWidth, medium);
+      }
+    }
+  }
+}

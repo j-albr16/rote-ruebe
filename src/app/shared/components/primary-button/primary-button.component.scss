@@ -4,15 +4,19 @@
 .button {
   display: block;
   text-align: center;
-  padding: map.get($padding, medium);
 
+  padding: map.get($padding, medium);
   background-color: map.get($color, primary);
+  width: 100%;
+  height: 100%;
 
   color: map.get($color, onPrimary);
-  font-size: map.get($fontSize, subtitle);
+  font-size: map.get($fontSize, normal);
   font-weight: map.get($fontWeight, medium);
 
   box-shadow: $shadow;
+  border: none;
+  border-radius: $borderRadius;
 
   &:hover {
     color: map.get($color, onPrimaryVariant);

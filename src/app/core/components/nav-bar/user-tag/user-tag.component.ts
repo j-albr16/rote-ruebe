@@ -17,7 +17,7 @@ export class UserTagComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadAuthUserData();
+    // this.loadAuthUserData();
   }
 
   loadAuthUserData(): void {
@@ -25,7 +25,9 @@ export class UserTagComponent implements OnInit {
       user => {
         this.image = user.image;
         this.userName = user.userName;
-      }
-    );
+      },
+      error => console.error(error)
+    )
+    ;
   }
 }

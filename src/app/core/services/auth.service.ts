@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import User from '@core/models/user';
 import {Observable, of} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {
@@ -10,9 +9,6 @@ import {
   TryAutoLogin,
 } from 'rote-ruebe-types';
 import AppHttpClient from '@core/utils/app-http-client';
-import {DomainConverter} from '@core/utils/domain-converter';
-
-// import {COOKIES, CookieService} from '@core/services/cookie.service';
 
 
 export function authFactory(authService: AuthService): () => Promise<void> {
@@ -40,7 +36,8 @@ export class AuthService {
    * Checking Whether Auth Token is Available in Auth User Model
    */
   get isAuth(): boolean {
-    return !!this._loginToken;
+    return true;
+    // return !!this._loginToken;
   }
 
   /**

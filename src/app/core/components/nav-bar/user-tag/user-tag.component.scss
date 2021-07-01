@@ -1,5 +1,5 @@
 @use 'sass:map';
-@import "styles";
+@import "src/styles/styles";
 
 $userImageSize: map.get($fontSize, huge);
 .user-tag {

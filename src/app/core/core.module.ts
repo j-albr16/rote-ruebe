@@ -9,14 +9,16 @@ import {RoutingModule} from '@core/utils/routing/routing.module';
 import {MatNativeDateModule} from '@angular/material/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SharedModule} from '../shared/shared.module';
-import {UserTagComponent} from './components/auth/user-tag/user-tag.component';
-import {AngularSvgIconModule} from 'angular-svg-icon';
+import {UserTagComponent} from './components/nav-bar/user-tag/user-tag.component';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
-import { BellComponent } from './components/auth/bell/bell.component';
-import { NotificationPopupComponent } from './components/auth/notification-popup/notification-popup.component';
+import {BellComponent} from './components/nav-bar/bell/bell.component';
+import {NotificationPopupComponent} from './components/nav-bar/notification-popup/notification-popup.component';
+import { HomePageComponent } from './components/home/home-page/home-page.component';
+import { FilterTopBarComponent } from './components/home/filter-top-bar/filter-top-bar.component';
+import { FilterSideBarComponent } from './components/home/filter-side-bar/filter-side-bar.component';
 
 @NgModule({
-  declarations: [NavBarComponent, AuthPageComponent, AuthFormComponent, UserTagComponent, BellComponent, NotificationPopupComponent],
+  declarations: [NavBarComponent, AuthPageComponent, AuthFormComponent, UserTagComponent, BellComponent, NotificationPopupComponent, HomePageComponent, FilterTopBarComponent, FilterSideBarComponent],
   imports: [
     CommonModule,
     RoutingModule,
@@ -26,7 +28,6 @@ import { NotificationPopupComponent } from './components/auth/notification-popup
     MatNativeDateModule,
     SharedModule,
     FormsModule,
-    AngularSvgIconModule.forRoot(),
     MatIconModule,
   ],
   providers: [

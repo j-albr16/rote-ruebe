@@ -1,15 +1,14 @@
 @use "sass:map";
 @import "styles";
 
+$inputSize: 700px;
+
 .form {
   display: flex;
   flex-grow: 1;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  padding: map.get($padding, little);
-
+  justify-content: flex-start;
+  align-items: flex-start;
 
   .form__field {
     @extend .input--wrapper;
@@ -22,6 +21,7 @@
       }
 
       .form__field--input__text {
+        width: $inputSize;
         @extend .input__text;
       }
     }
@@ -33,13 +33,16 @@
         @extend .input__error;
       }
     }
+
   }
 
   .button {
-    display: block;
-    width: 25%;
-    padding: map.get($padding, little);
-    border-radius: $borderRadius / 2;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+
+    width: $inputSize;
+    padding-top: map.get($padding, large);
   }
 
 }

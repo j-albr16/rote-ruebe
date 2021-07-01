@@ -8,7 +8,7 @@ import {
 } from '@angular/common/http';
 import {Observable, pipe, throwError, UnaryFunction} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-import {ErrorBody, ResBody} from 'rote-ruebe-types';
+import {ResBody} from 'rote-ruebe-types';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -24,7 +24,6 @@ export class ErrorInterceptor implements HttpInterceptor {
         return throwError(`HttpError:\n${err.message}`);
       }),
     );
-    ;
   }
 
   handlingResponse(): UnaryFunction<Observable<HttpEvent<ResBody>>, Observable<HttpEvent<any>>> {

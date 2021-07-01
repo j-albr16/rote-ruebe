@@ -16,9 +16,13 @@ $color: (
 $fontSize: (
   hint: 8px,
   body: 12px,
+  normal: 15px,
   subtitle: 18px,
   headline: 24px,
   huge: 40px,
+  b1: 60px,
+  b2: 80px,
+  b3: 100px,
 );
 
 $fontWeight: (
@@ -37,9 +41,10 @@ $borderWidth: (
 $borderRadius: 6px;
 
 $padding: (
-  little: 20px,
-  medium: 40px,
-  large: 80px,
+  little: 10px,
+  medium: 20px,
+  large: 40px,
 );
 
 $shadow: 3px 4px 4px rgba(0, 0, 0, 0.25);
+$navBarSize: 80px;

@@ -2,7 +2,6 @@
 @import "styles";
 
 
-
 .nav-bar {
   display: flex;
   align-items: center;
@@ -15,6 +14,7 @@
   margin: 0;
   list-style: none;
   width: 100%;
+  height: $navBarSize;
 
 
   .nav-bar__item {
@@ -23,7 +23,7 @@
     align-items: center;
     justify-content: space-evenly;
 
-    padding: 0 map.get($padding, little);
+    padding: 0 map.get($padding, medium);
     color: map.get($color, onPrimary);
 
     &:hover {
@@ -35,7 +35,7 @@
       font-size: map.get($fontSize, subtitle);
       font-weight: map.get($fontWeight, regular);
 
-      padding: map.get($padding, medium) 8px;
+      padding: map.get($padding, medium) map.get($padding, little);
       margin: 0;
     }
 
@@ -46,7 +46,7 @@
       height: map.get($fontSize, subtitle);
       width: map.get($fontSize, subtitle);
 
-      padding: map.get($padding, medium) 8px;
+      padding: map.get($padding, medium) map.get($padding, little);
 
     }
   }

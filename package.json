@@ -26,7 +26,6 @@
     "@angular/platform-browser-dynamic": "^11.2.12",
     "@angular/router": "^11.2.12",
     "@types/reflect-metadata": "^0.1.0",
-    "angular-svg-icon": "^11.2.0",
     "fs": "^0.0.1-security",
     "ng-inline-svg": "^13.0.0",
     "npm": "^7.19.0",
