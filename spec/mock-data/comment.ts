@@ -7,6 +7,7 @@ const furtherDate = (minutes: number) => {
 };
 
 export const mockICommentList: IComment[] = [
+  // New to old: top to bottom
   {
     id: '3',
     updatedAt: furtherDate(3),
@@ -38,5 +39,33 @@ export const mockICommentList: IComment[] = [
     text: 'commentZero',
     author: defaultIUser,
     exchangeObjectId: '420',
+  },
+];
+
+export const mockUnreadICommentCountList: { exchangeObjectId: string, count: number, comment?: IComment }[] = [
+  // Old to new: top to bottom
+  {
+    exchangeObjectId: '420',
+    count: 1,
+    comment: mockICommentList[3],
+  },
+  {
+    exchangeObjectId: '420',
+    count: 0,
+    comment: null,
+  },
+  {
+    exchangeObjectId: '420',
+    count: 6,
+    comment: mockICommentList[2],
+  },
+  {
+    exchangeObjectId: '420',
+    count: 5,
+    comment: mockICommentList[1],
+  },
+  {
+    exchangeObjectId: '420',
+    count: 4,
   },
 ];

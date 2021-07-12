@@ -4,6 +4,9 @@ import ExchangeObject from '@core/models/exchange-object';
 import {Observable, Subject} from 'rxjs';
 import {Socket} from 'socket.io-client';
 
+export type UnreadCommentCountObs =
+  Observable<{exchangeObjectId: string, count: number, comment?: Comment}>;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,13 +17,13 @@ export class CommentService {
 
     initCustomIo(socket: Socket): void{}
 
-    initUnreadMap(initMap: Map<string, {amount: number, comment?: Comment}>): void{}
+    initUnreadMap(initMap: Map<string, {count: number, comment?: Comment}>): void{}
 
     getComments(object: ExchangeObject): {observable: Observable<Comment>, subject: Subject<number>, newest: Observable<Comment>} {
       return;
     }
 
-    getCommentCount(object: ExchangeObject): Observable<Comment>{
+    getCommentCount(object: ExchangeObject): Observable<number>{
       return;
     }
 
@@ -28,7 +31,7 @@ export class CommentService {
       return;
     }
 
-    getUnreadCommentCount(): Observable<{ exchangeObjectId: string, amount: number, comment: Comment }>{
+    getUnreadCommentCount(): UnreadCommentCountObs{
       return;
     }
 }
