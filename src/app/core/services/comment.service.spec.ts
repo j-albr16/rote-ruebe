@@ -25,11 +25,16 @@ describe('CommentService', () => {
   let authService: AuthService;
   let httpTestingController: HttpTestingController;
   let mockCommentList: IComment[];
+  let mockSocket: MockedSocket;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
-      providers: [ CommentService, AppHttpClient, AuthService,
+      providers: [
+        CommentService,
+        {provide: 'commentCustomSocket', useValue: mockSocket},
+        AppHttpClient,
+        AuthService,
         {
           provide: HTTP_INTERCEPTORS,
           useClass: DevLogInterceptor,
@@ -42,17 +47,13 @@ describe('CommentService', () => {
     appHttpClient = TestBed.inject(AppHttpClient);
     httpTestingController = TestBed.inject(HttpTestingController);
     mockCommentList = mockICommentList;
+    mockSocket = new MockedSocket();
+    commentService.initIo(mockSocket);
   });
 
   describe('Socket checks', () => {
-    let mockSocket: MockedSocket = new MockedSocket();
-    beforeEach(() => {
-      mockSocket = new MockedSocket();
-    });
 
     it('should init custom Socket', done => {
-      commentService.initCustomIo(mockSocket);
-
       const eventName = 'custom-socket-test';
       const mockString = 'Mock test emit';
       commentService.commentSocket.on(eventName, (testString: string) => {
@@ -68,10 +69,7 @@ describe('CommentService', () => {
     let obs: Observable<Comment>;
     let sub: Subject<number>;
     let newest: Observable<Comment>;
-    let mockSocket: MockedSocket = new MockedSocket();
     beforeEach(() => {
-      mockSocket = new MockedSocket();
-      commentService.initCustomIo(mockSocket);
       const obsSubNew = commentService.getComments({id: '420'} as ExchangeObject);
       obs = obsSubNew.observable;
       sub = obsSubNew.subject;
@@ -245,11 +243,6 @@ describe('CommentService', () => {
   });
 
   describe('getCommentCount', () => {
-    let mockSocket: MockedSocket = new MockedSocket();
-    beforeEach(() => {
-      mockSocket = new MockedSocket();
-      commentService.initCustomIo(mockSocket);
-    });
 
     it('should trigger SubToCommentCount event on socket', done => {
       const obs = commentService.getCommentCount({id: '420' } as ExchangeObject);
@@ -353,10 +346,7 @@ describe('CommentService', () => {
   describe('getUnreadCommentCount', () => {
     let obs: UnreadCommentCountObs;
     let mockUnreadCommentCountList: { exchangeObjectId: string, count: number, comment?: IComment }[];
-    let mockSocket: MockedSocket = new MockedSocket();
     beforeEach(() => {
-      mockSocket = new MockedSocket();
-      commentService.initCustomIo(mockSocket);
       obs = commentService.getUnreadCommentCount();
       mockUnreadCommentCountList = mockUnreadICommentCountList;
     });

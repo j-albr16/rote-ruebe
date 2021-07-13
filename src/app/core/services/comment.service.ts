@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import ExchangeObject from '@core/models/exchange-object';
 import {Observable, Subject} from 'rxjs';
@@ -11,27 +11,27 @@ export type UnreadCommentCountObs =
   providedIn: 'root'
 })
 export class CommentService {
-    public commentSocket: Socket;
+  public commentSocket: Socket;
 
   constructor(private http: HttpClient) {}
 
-    initCustomIo(socket: Socket): void{}
+  initIo(socket?: Socket): void{}
 
-    initUnreadMap(initMap: Map<string, {count: number, comment?: Comment}>): void{}
+  initUnreadMap(initMap: Map<string, {count: number, comment?: Comment}>): void{}
 
-    getComments(object: ExchangeObject): {observable: Observable<Comment>, subject: Subject<number>, newest: Observable<Comment>} {
-      return;
-    }
+  getComments(object: ExchangeObject): {observable: Observable<Comment>, subject: Subject<number>, newest: Observable<Comment>} {
+    return;
+  }
 
-    getCommentCount(object: ExchangeObject): Observable<number>{
-      return;
-    }
+  getCommentCount(object: ExchangeObject): Observable<number>{
+    return;
+  }
 
-    sendComment(comment: Comment): Observable<Comment>{
-      return;
-    }
+  sendComment(comment: Comment): Observable<Comment>{
+    return;
+  }
 
-    getUnreadCommentCount(): UnreadCommentCountObs{
-      return;
-    }
+  getUnreadCommentCount(): UnreadCommentCountObs{
+    return;
+  }
 }
