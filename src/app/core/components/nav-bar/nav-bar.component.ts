@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {Svg} from '../../../shared/components/svg/svg.component';
 import {AuthService} from '@core/services';
-import {AppRoutes, navRoute} from '@core/utils/enums';
+import {AppRoutes, navRoute, Svg} from '@core/utils/enums';
 
 interface NavBarEntry {
   path: string;

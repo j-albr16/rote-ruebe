@@ -1,0 +1,28 @@
+<div class="side-filter">
+
+  <div class="side-filter__text">
+
+    <div class="side-filter__paragraph" *ngFor="let entry of sideFilterTextOptions; let indexObject=index">
+      <h1 class="side-filter__paragraph--subtitle">{{entry.subtitle}}</h1>
+      <ul class="side-filter__paragraph--choices">
+        <li class="side-filter__paragraph--choice" [ngClass]="{'selected': entry.selected === indexOption}"
+            *ngFor="let textEntry of entry.options; let indexOption=index"
+            (click)="entry.selected = indexOption">{{textEntry.text}}</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="side-filter__divider"></div>
+
+  <div class="side-filter__tick-choices" *ngFor="let checkBox of checkboxList">
+    <div class="side-filter__tick-choice">
+      <label class="side-filter__tick-choice--label" [for]="checkBox.label">{{checkBox.label}}</label>
+      <input type="checkbox" class="side-filter__tick-choice--checkbox" [id]="checkBox.label" [value]="checkBox.value">
+    </div>
+  </div>
+
+</div>
+
+
+

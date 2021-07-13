@@ -1,6 +1,5 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {ViewMode} from '@core/utils/enums';
-import {Svg} from '../../../../shared/components/svg/svg.component';
+import {Svg, ViewMode} from '@core/utils/enums';
 
 @Component({
   selector: 'app-filter-top-bar',

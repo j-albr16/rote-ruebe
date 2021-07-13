@@ -3,5 +3,10 @@
   <app-filter-top-bar [(b_filter)]="b_filter" [(viewMode)]="viewMode" (searchEmitter)="changeSearchText($event)"
                       class="home-page__top-bar"></app-filter-top-bar>
 
+  <div class="home-page__main-body">
+    <app-filter-side-bar class="home-page__main-body--side-bar"></app-filter-side-bar>
+    <div class="home-page__main-body--exchange-objects"></div>
+  </div>
+
 
 </div>

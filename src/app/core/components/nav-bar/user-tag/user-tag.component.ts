@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {Svg} from '../../../../shared/components/svg/svg.component';
 import {UserService} from '@core/services/user.service';
 import AppImage from '@core/models/app-image';
+import {Svg} from '@core/utils/enums';
 
 @Component({
   selector: 'app-user-tag',

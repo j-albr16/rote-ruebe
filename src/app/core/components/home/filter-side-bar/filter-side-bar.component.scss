@@ -1,0 +1,87 @@
+@use 'sass:map';
+@import "styles";
+
+@mixin filterText() {
+  color: map.get($color, onPrimary);
+  padding: map.get($padding, little);
+  font-size: map.get($color, body);
+  font-weight: map.get($fontWeight, normal);
+  font-style: normal;
+}
+
+.side-filter {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  background-color: map.get($color, onSurface);
+
+  .side-filter__text {
+
+    .side-filter__paragraph {
+      padding: map.get($padding, little) map.get($padding, medium);
+
+      .side-filter__paragraph--subtitle {
+        color: map.get($color, onPrimary);
+        margin: 0;
+        font-weight: map.get($fontWeight, regular);
+        font-size: map.get($fontSize, subtitle);
+      }
+
+      .side-filter__paragraph--choices {
+        list-style: none;
+        padding: map.get($padding, little) map.get($padding, medium);
+        margin: 0;
+
+        .side-filter__paragraph--choice {
+          @include filterText;
+          cursor: pointer;
+
+          &:hover, &.selected {
+            color: map.get($color, onPrimaryVariant);
+          }
+        }
+      }
+    }
+  }
+
+  .side-filter__divider {
+    width: 80%;
+    height: 0;
+    border-bottom: map.get($color, onPrimary) solid map.get($borderWidth, thin);
+    align-self: center;
+    margin: map.get($padding, medium) 0;
+  }
+
+
+  .side-filter__tick-choices {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    align-self: center;
+    justify-self: center;
+
+    padding: map.get($padding, huge);
+
+    .side-filter__tick-choice {
+      @include generalFlex;
+      cursor: pointer;
+
+      .side-filter__tick-choice--label {
+        @include filterText;
+      }
+
+      .side-filter__tick-choice--checkbox {
+        height: 30px;
+        width: 30px;
+        color: #2CA42A !important;
+        background-color: #D97F7F !important;
+        text-decoration-color: #D97F7F;
+      }
+
+    }
+  }
+}

@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {ViewMode} from '@core/utils/enums';
-import {Svg} from '../../../../shared/components/svg/svg.component';
 
 @Component({
   selector: 'app-home-page',

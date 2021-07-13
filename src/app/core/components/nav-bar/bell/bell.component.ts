@@ -1,5 +1,5 @@
 import {HostListener, AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
-import {Svg} from '../../../../shared/components/svg/svg.component';
+import {Svg} from '@core/utils/enums';
 
 @Component({
   selector: 'app-bell',

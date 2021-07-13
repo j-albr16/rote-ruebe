@@ -3,26 +3,25 @@ import {CommonModule} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
-import {SvgComponent} from './components/svg/svg.component';
 import {PrimaryButtonComponent} from './components/primary-button/primary-button.component';
-import { ClickOutsideDirective } from './Directives/utils/click-outside.directive';
+import {ClickOutsideDirective} from './Directives/utils/click-outside.directive';
+import { CheckboxComponent } from './components/checkbox/checkbox.component';
 
 
 @NgModule({
   declarations: [
-    SvgComponent, PrimaryButtonComponent, ClickOutsideDirective
+    PrimaryButtonComponent, ClickOutsideDirective, CheckboxComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     HttpClientModule
   ],
-    exports: [
-        RouterModule,
-        SvgComponent,
-        PrimaryButtonComponent,
-        ClickOutsideDirective,
-    ],
+  exports: [
+    RouterModule,
+    PrimaryButtonComponent,
+    ClickOutsideDirective,
+  ],
 })
 export class SharedModule {
 }

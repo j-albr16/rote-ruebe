@@ -1,0 +1,25 @@
+@use 'sass:map';
+@import "styles";
+
+.checkbox--wrapper {
+
+  .content {
+    
+  }
+
+  .checkbox {
+    border: solid map.get($borderWidth, thin) map.get($color, onPrimary);
+    border-radius: $borderRadius;
+
+    background-color: map.get($color, onSurface);
+    color: transparent;
+    box-shadow: $shadow;
+
+    &.checked {
+      color: map.get($color, onPrimary);
+      background-color: map.get($color, valid);
+    }
+  }
+
+}
+

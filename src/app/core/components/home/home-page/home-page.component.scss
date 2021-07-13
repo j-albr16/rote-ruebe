@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  height: 100%;
   flex-grow: 1;
 
   padding-top: $navBarSize;
@@ -13,9 +14,26 @@
     width: 100%;
 
 
-
   }
 
+  .home-page__main-body {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
 
+    .home-page__main-body--side-bar {
+      display: flex;
+      flex-grow: 1;
+
+      border-top: map.get($color, onPrimaryVariant) map.get($borderWidth, thin) solid;
+    }
+
+    .home-page__main-body--exchange-objects {
+      display: flex;
+      flex-grow: 3;
+
+      background-color: white;
+    }
+  }
 }
 
