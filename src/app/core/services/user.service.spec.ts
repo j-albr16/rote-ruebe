@@ -10,6 +10,7 @@ import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {DevLogInterceptor} from '@core/interceptor/dev-log.interceptor';
 import {Observable} from 'rxjs';
 import {AuthService} from '@core/services/auth.service';
+import {httpTest} from '../../../../spec/utils/httpTest';
 
 
 
@@ -49,10 +50,8 @@ describe('UserService', () => {
         expect(user).toEqual(DomainConverter.fromDto(User, mockIUser));
         done();
       });
-      const res: FetchUser.Response = mockIUser;
 
-      const request = httpTestingController.expectOne(FetchUser.methode.name + '?userId=0');
-      request.flush(res);
+      httpTest(httpTestingController, FetchUser.methode)({userId: '0'}, mockIUser);
       httpTestingController.verify();
     });
 
@@ -66,12 +65,9 @@ describe('UserService', () => {
         done();
       });
 
-      httpTestingController.expectNone(FetchUser.methode.name + '?userId=1');
+      httpTest(httpTestingController, FetchUser.methode)({userId: '1'});
       httpTestingController.verify();
     });
-
-
-
     });
 
   describe('refreshUser', () => {
@@ -90,13 +86,10 @@ describe('UserService', () => {
 
       userService.refreshUser('1').subscribe((user) => {
         expect(user).toEqual(DomainConverter.fromDto(User, changedMock));
-
         done();
       });
 
-      const request = httpTestingController.expectOne(FetchUser.methode.name + '?userId=1');
-
-      request.flush(changedMock);
+      httpTest(httpTestingController, FetchUser.methode)({userId: '1'}, changedMock);
       httpTestingController.verify();
     });
   });
@@ -119,11 +112,8 @@ describe('UserService', () => {
         done();
       });
 
-      const request = httpTestingController.expectOne(ChangeUser.methode.name);
+      httpTest(httpTestingController, ChangeUser.methode)(req, mockIUser);
 
-      expect(request.request.body).toEqual(req);
-
-      request.flush(mockIUser);
       httpTestingController.verify();
     });
   });
@@ -152,20 +142,15 @@ describe('UserService', () => {
         }
       });
 
-      const request = httpTestingController.expectOne(FetchUserList.methode.name);
-      expect(request.request.body).toEqual({
+      httpTest(httpTestingController, FetchUserList.methode)({
         amount: 2,
         furthestUserId: undefined,
         userFilter: {
           orderBy: OrderType.Alphabetical,
         }
-      });
-
-      const res: FetchUserList.Response = {
+      }, {
         userList: sortedMock.slice(0, 2)
-      };
-      request.flush(res);
-
+      });
 
       httpTestingController.verify();
     });
@@ -194,33 +179,26 @@ describe('UserService', () => {
 
       sub.next(2);
 
-      const request = httpTestingController.expectOne(FetchUserList.methode.name);
-      expect(request.request.body).toEqual({
+
+      httpTest(httpTestingController, FetchUserList.methode)({
         amount: 2,
         furthestUserId: undefined,
         userFilter: {
           orderBy: OrderType.Alphabetical,
         }
+      }, {
+        userList: sortedMock.slice(0, 2)
       });
 
-      const res: FetchUserList.Response = {
-        userList: sortedMock.slice(0, 2)
-      };
-      request.flush(res);
-
-      const request2 = httpTestingController.expectOne(FetchUserList.methode.name);
-      expect(request2.request.body).toEqual({
+      httpTest(httpTestingController, FetchUserList.methode)({
         amount: 3,
         furthestUserId: '4',
         userFilter: {
           orderBy: OrderType.Alphabetical,
         }
-      });
-      const res2: FetchUserList.Response = {
+      }, {
         userList: sortedMock.slice(2, 5)
-      };
-      request2.flush(res2);
-
+      });
 
       httpTestingController.verify();
     });
@@ -245,21 +223,15 @@ describe('UserService', () => {
 
       sub.next(5);
 
-      const request = httpTestingController.expectOne(FetchUserList.methode.name);
-      expect(request.request.body).toEqual({
+      httpTest(httpTestingController, FetchUserList.methode)({
         amount: 5,
         furthestUserId: undefined,
         userFilter: {
           orderBy: OrderType.Alphabetical,
         }
-      });
-
-      const res: FetchUserList.Response = {
+      }, {
         userList: sortedMock.slice(0, 3)
-      };
-      request.flush(res);
-
-
+      });
       httpTestingController.verify();
     });
 
@@ -295,36 +267,27 @@ describe('UserService', () => {
 
       sub.next(2);
 
-      const request = httpTestingController.expectOne(FetchUserList.methode.name);
-      expect(request.request.body).toEqual({
+      httpTest(httpTestingController, FetchUserList.methode)({
         amount: 2,
         furthestUserId: undefined,
         userFilter: {
           orderBy: OrderType.Alphabetical,
-        }
+        }}, {
+        userList: sortedMock.slice(0, 2)
       });
 
-      const res: FetchUserList.Response = {
-        userList: sortedMock.slice(0, 2)
-      };
-      request.flush(res);
-
-      const request2 = httpTestingController.expectOne(FetchUserList.methode.name);
-      expect(request2.request.body).toEqual({
+      httpTest(httpTestingController, FetchUserList.methode)({
         amount: 3,
         furthestUserId: '4',
         userFilter: {
           orderBy: OrderType.Alphabetical,
         }
-      });
-      const res2: FetchUserList.Response = {
+      }, {
         userList: sortedMock.slice(2, 5)
-      };
-      request2.flush(res2);
-
+      });
 
       httpTestingController.verify();
-    })
+    });
   });
 
   describe('getMyUser', () => {
