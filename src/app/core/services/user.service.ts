@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
-import {from, Observable, of, ReplaySubject, Subject} from 'rxjs';
+import {from, Observable, ReplaySubject, Subject} from 'rxjs';
 import {catchError, finalize, map, mergeMap, tap} from 'rxjs/operators';
 
 import {ChangeUser, FetchUserList, UserFilter, FetchUser} from 'rote-ruebe-types';
 
-import MemorySubject from '@core/utils/rxjs/MemorySubject';
 import User from '@core/models/user';
 import {AuthService} from '@core/services/auth.service';
 import AppHttpClient from '@core/utils/app-http-client';
