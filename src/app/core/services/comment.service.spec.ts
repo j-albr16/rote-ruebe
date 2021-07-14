@@ -11,13 +11,16 @@ import {mockICommentList, mockUnreadICommentCountList} from '../../../../spec/mo
 import ExchangeObject from '@core/models/exchange-object';
 import {Observable, Subject} from 'rxjs';
 import {DomainConverter} from '@core/utils/domain-converter';
-import MockedSocket from 'socket.io-mock';
+import MockedServerSocket from 'socket.io-mock'
+import { SocketMock, SocketClient } from 'typescript-declarations/socketio-mock';
 import NewComment = CommentSocket.NewComment;
 import SubToCommentCount = CommentSocket.SubToCommentCount;
 import NewCommentCount = CommentSocket.NewCommentCount;
 import UnsubToCommentCount = CommentSocket.UnsubToCommentCount;
 import UnreadCommentCount = CommentSocket.UnreadCommentCount;
 import {timeout} from 'rxjs/operators';
+import {Socket} from 'socket.io-client';
+
 
 describe('CommentService', () => {
   let commentService: CommentService;
@@ -25,7 +28,8 @@ describe('CommentService', () => {
   let authService: AuthService;
   let httpTestingController: HttpTestingController;
   let mockCommentList: IComment[];
-  let mockSocket: MockedSocket;
+  let mockSocketServer: SocketMock;
+  let mockSocket: SocketClient;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -47,8 +51,9 @@ describe('CommentService', () => {
     appHttpClient = TestBed.inject(AppHttpClient);
     httpTestingController = TestBed.inject(HttpTestingController);
     mockCommentList = mockICommentList;
-    mockSocket = new MockedSocket();
-    commentService.initIo(mockSocket);
+    mockSocketServer = new MockedServerSocket();
+    mockSocket = mockSocketServer.socketClient;
+    commentService.initIo(mockSocket as unknown as Socket);
   });
 
   describe('Socket checks', () => {
@@ -60,7 +65,7 @@ describe('CommentService', () => {
         expect(testString).toEqual(mockString);
         done();
       });
-      mockSocket.clientSocket.emit(eventName, mockString);
+      mockSocketServer.emit(eventName, mockString);
     });
 
   });
@@ -238,7 +243,7 @@ describe('CommentService', () => {
         done()
       });
 
-      mockSocket.socketClient.emit(NewComment.name, mockCommentList[0]);
+      mockSocketServer.emit(NewComment.name, mockCommentList[0]);
     })
   });
 
@@ -250,7 +255,7 @@ describe('CommentService', () => {
         expect(commentCount).toEqual(3);
         done();
       });
-      mockSocket.clientSocket.on(SubToCommentCount.name, (body: SubToCommentCount.body, callback: SubToCommentCount.callback) => {
+      mockSocketServer.on(SubToCommentCount.name, (body: SubToCommentCount.body, callback: SubToCommentCount.callback) => {
         expect(body.exchangeObjectId).toEqual('420');
         callback(3);
       });
@@ -268,22 +273,22 @@ describe('CommentService', () => {
           done();
         }
       });
-      mockSocket.clientSocket.on(SubToCommentCount.name, (body: SubToCommentCount.body, callback: SubToCommentCount.callback) => {
+      mockSocketServer.on(SubToCommentCount.name, (body: SubToCommentCount.body, callback: SubToCommentCount.callback) => {
         expect(body.exchangeObjectId).toEqual('420');
         callback(3);
       });
-      mockSocket.clientSocket.emit(NewCommentCount.name, {exchangeObjectId: '420', commentCount: 4});
+      mockSocketServer.emit(NewCommentCount.name, {exchangeObjectId: '420', commentCount: 4});
     });
 
     it('should trigger Unsub event when Observable is unsubscribed', done => {
       const obs = commentService.getCommentCount({id: '420' } as ExchangeObject);
       const subsciptiom = obs.subscribe((commentCount) => {});
-      mockSocket.clientSocket.on(SubToCommentCount.name, (body: SubToCommentCount.body, callback: SubToCommentCount.callback) => {
+      mockSocketServer.on(SubToCommentCount.name, (body: SubToCommentCount.body, callback: SubToCommentCount.callback) => {
         expect(body.exchangeObjectId).toEqual('420');
         callback(3);
       });
 
-      mockSocket.clientSocket.on(UnsubToCommentCount.name, (body: UnsubToCommentCount.body, callback: UnsubToCommentCount.callback) => {
+      mockSocketServer.on(UnsubToCommentCount.name, (body: UnsubToCommentCount.body, callback: UnsubToCommentCount.callback) => {
         expect(body.exchangeObjectId).toEqual('420');
         callback('');
         done();
@@ -413,9 +418,9 @@ describe('CommentService', () => {
       });
       httpTestingController.expectNone(CommentRoutes.FetchUnreadCommentCount);
 
-      mockSocket.clientSocket.emit(UnreadCommentCount.name, mockUnreadCommentCountList[0]);
+      mockSocketServer.emit(UnreadCommentCount.name, mockUnreadCommentCountList[0]);
       setTimeout(() => {
-        mockSocket.clientSocket.emit(UnreadCommentCount.name, mockUnreadCommentCountList[1]);
+        mockSocketServer.emit(UnreadCommentCount.name, mockUnreadCommentCountList[1]);
       }, 200);
     });
   });
