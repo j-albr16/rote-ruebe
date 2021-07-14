@@ -21,6 +21,7 @@ import UnsubToCommentCount = CommentSocket.UnsubToCommentCount;
 import UnreadCommentCount = CommentSocket.UnreadCommentCount;
 import {timeout} from 'rxjs/operators';
 import {Socket} from 'socket.io-client';
+import {httpTest} from '../../../../spec/utils/httpTest';
 
 
 describe('CommentService', () => {
@@ -94,13 +95,13 @@ describe('CommentService', () => {
         }
       });
 
-      const request = httpTestingController.expectOne(FetchCommentList.methode.name + '?exchangeObjectId=420&amount=2');
-
-      const res: FetchCommentList.Response = {
+      httpTest(httpTestingController, FetchCommentList.methode)({
+        exchangeObjectId: '420',
+        amount: 2,
+        furthestCommentId: undefined,
+      }, {
         commentList: mockCommentList.slice(0, 2)
-      };
-      request.flush(res);
-
+      });
 
       httpTestingController.verify();
 
@@ -122,21 +123,21 @@ describe('CommentService', () => {
 
       sub.next(2);
 
-      const request = httpTestingController.expectOne(FetchCommentList.methode.name + '?exchangeObjectId=420&amount=2');
-
-      const res: FetchCommentList.Response = {
+      httpTest(httpTestingController, FetchCommentList.methode)({
+        exchangeObjectId: '420',
+        amount: 2,
+        furthestCommentId: undefined
+      }, {
         commentList: mockCommentList.slice(0, 2)
-      };
-      request.flush(res);
+      });
 
-      const request2 = httpTestingController
-        .expectOne(FetchCommentList.methode.name + '?exchangeObjectId=420&amount=2&furthestCommentId=2');
-
-      const res2: FetchCommentList.Response = {
+      httpTest(httpTestingController, FetchCommentList.methode)({
+        exchangeObjectId: '420',
+        amount: 2,
+        furthestCommentId: '2'
+      }, {
         commentList: mockCommentList.slice(2, 4)
-      };
-      request2.flush(res2);
-
+      });
 
       httpTestingController.verify();
 
@@ -166,21 +167,21 @@ describe('CommentService', () => {
 
       sub.next(2);
 
-      const request = httpTestingController.expectOne(FetchCommentList.methode.name + '?exchangeObjectId=420&amount=2');
-
-      const res: FetchCommentList.Response = {
+      httpTest(httpTestingController, FetchCommentList.methode)({
+        exchangeObjectId: '420',
+        amount: 2,
+        furthestCommentId: undefined,
+      }, {
         commentList: mockCommentList.slice(0, 2)
-      };
-      request.flush(res);
+      });
 
-      const request2 = httpTestingController
-        .expectOne(FetchCommentList.methode.name + '?exchangeObjectId=420&amount=2&furthestCommentId=2');
-
-      const res2: FetchCommentList.Response = {
+      httpTest(httpTestingController, FetchCommentList.methode)({
+        exchangeObjectId: '420',
+        amount: 2,
+        furthestCommentId: '2',
+      }, {
         commentList: mockCommentList.slice(2, 4)
-      };
-      request2.flush(res2);
-
+      });
 
       httpTestingController.verify();
     });
@@ -199,13 +200,13 @@ describe('CommentService', () => {
 
       sub.next(5);
 
-      const request = httpTestingController.expectOne(FetchCommentList.methode.name + '?exchangeObjectId=420&amount=5');
-
-      const res: FetchCommentList.Response = {
+      httpTest(httpTestingController, FetchCommentList.methode)({
+        exchangeObjectId: '420',
+        amount: 5,
+        furthestCommentId: undefined,
+      }, {
         commentList: mockCommentList.slice(0, 4)
-      };
-      request.flush(res);
-
+      });
 
       httpTestingController.verify();
     });
@@ -275,12 +276,10 @@ describe('CommentService', () => {
       const obs = commentService.sendComment(DomainConverter.fromDto(Comment, mockCommentList[0]));
       obs.subscribe(comment => {});
 
-      const request = httpTestingController.expectOne(SendComment.methode.name);
-      expect(request.request.body).toEqual({
+      httpTest(httpTestingController, SendComment.methode)({
         text: mockCommentList[0].text,
         exchangeObjectId: mockCommentList[0].exchangeObjectId,
-      });
-      request.flush(mockCommentList[0])
+      }, mockCommentList[0]);
     });
 
     it('should return sent Comment', done => {
@@ -289,12 +288,10 @@ describe('CommentService', () => {
         expect(comment).toEqual(DomainConverter.fromDto(Comment, mockCommentList[0]));
         done();
       });
-      const request = httpTestingController.expectOne(SendComment.methode.name);
-      expect(request.request.body).toEqual({
+      httpTest(httpTestingController, SendComment.methode)({
         text: mockCommentList[0].text,
         exchangeObjectId: mockCommentList[0].exchangeObjectId,
-      });
-      request.flush(mockCommentList[0]);
+      }, mockCommentList[0]);
     });
 
     it('should close Observable after Comment return', done => {
@@ -312,12 +309,10 @@ describe('CommentService', () => {
             }
           }
     });
-      const request = httpTestingController.expectOne(SendComment.methode.name);
-      expect(request.request.body).toEqual({
+      httpTest(httpTestingController, SendComment.methode)({
         text: mockCommentList[0].text,
         exchangeObjectId: mockCommentList[0].exchangeObjectId,
-      });
-      request.flush(mockCommentList[0]);
+      }, mockCommentList[0]);
     });
     });
 
@@ -344,12 +339,9 @@ describe('CommentService', () => {
         }
       });
 
-      const req = httpTestingController.expectOne(CommentRoutes.FetchUnreadCommentCount);
-      expect(req.request.body).toEqual({});
-      const reqFlush: FetchUnreadCommentCount.Response = {
+      httpTest(httpTestingController, FetchUnreadCommentCount.methode)({}, {
         countMap: mockUnreadCommentCountList.slice(0, 2),
-      };
-      req.flush(reqFlush);
+      });
     });
 
     it('should get unreadCommentCount without fetching (cache)', done => {
@@ -370,7 +362,7 @@ describe('CommentService', () => {
         done();
       });
 
-      httpTestingController.expectNone(CommentRoutes.FetchUnreadCommentCount);
+      httpTest(httpTestingController, FetchUnreadCommentCount.methode)({});
     });
 
     it('should get new unreadComments with socket io', done => {
@@ -389,7 +381,7 @@ describe('CommentService', () => {
           done();
         }
       });
-      httpTestingController.expectNone(CommentRoutes.FetchUnreadCommentCount);
+      httpTest(httpTestingController, FetchUnreadCommentCount.methode)({});
 
       mockSocketServer.emit(UnreadCommentCount.name, mockUnreadCommentCountList[0]);
       setTimeout(() => {
