@@ -56,7 +56,11 @@ export const initSpaceSocket = <ClientEvents extends SocketEntries, ServerEvents
   return space.forming<InitReturnType<ServerEvents>>(func);
 };
 
-export const ioSenderWrapper =
+export type WrappedSender =
+  <Body, Callback extends Function | undefined>(socketEvent: SocketEvent<Body, Callback>)
+    => (body: Body, callback: UndefinedOptional<Callback>) => void;
+
+export const ioSenderWrapper: (socket: Socket) => WrappedSender =
   (socket: Socket) =>
     <Body, Callback extends Function | undefined>(socketEvent: SocketEvent<Body, Callback>) => ioSender(socketEvent, socket);
 

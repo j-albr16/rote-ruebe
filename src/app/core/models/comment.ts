@@ -14,3 +14,5 @@ export default class Comment implements IComment {
   constructor(private state: IComment) {
   }
 }
+
+// TODO Discuss renaming to AppComment as there seems to be a native type "Comment"

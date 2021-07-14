@@ -13,6 +13,7 @@ import {Observable, Subject} from 'rxjs';
 import {DomainConverter} from '@core/utils/domain-converter';
 import MockedServerSocket from 'socket.io-mock'
 import { SocketMock, SocketClient } from 'typescript-declarations/socketio-mock';
+import Comment from '@core/models/comment';
 import NewComment = CommentSocket.NewComment;
 import SubToCommentCount = CommentSocket.SubToCommentCount;
 import NewCommentCount = CommentSocket.NewCommentCount;
@@ -75,7 +76,7 @@ describe('CommentService', () => {
     let sub: Subject<number>;
     let newest: Observable<Comment>;
     beforeEach(() => {
-      const obsSubNew = commentService.getComments({id: '420'} as ExchangeObject);
+      const obsSubNew = commentService.getCommentList({id: '420'} as ExchangeObject);
       obs = obsSubNew.observable;
       sub = obsSubNew.subject;
       newest = obsSubNew.newest;
@@ -93,12 +94,7 @@ describe('CommentService', () => {
         }
       });
 
-      const request = httpTestingController.expectOne(FetchCommentList.methode.name);
-      expect(request.request.body).toEqual({
-        amount: 2,
-        furthestUserId: undefined,
-        exchangeObjectId: '420'
-      });
+      const request = httpTestingController.expectOne(FetchCommentList.methode.name + '?exchangeObjectId=420&amount=2');
 
       const res: FetchCommentList.Response = {
         commentList: mockCommentList.slice(0, 2)
@@ -126,29 +122,20 @@ describe('CommentService', () => {
 
       sub.next(2);
 
-      const request = httpTestingController.expectOne(FetchCommentList.methode.name);
-      expect(request.request.body).toEqual({
-        amount: 2,
-        furthestUserId: undefined,
-        exchangeObjectId: '420'
-      });
+      const request = httpTestingController.expectOne(FetchCommentList.methode.name + '?exchangeObjectId=420&amount=2');
 
       const res: FetchCommentList.Response = {
         commentList: mockCommentList.slice(0, 2)
       };
       request.flush(res);
 
-      const request2 = httpTestingController.expectOne(FetchCommentList.methode.name);
-      expect(request2.request.body).toEqual({
-        amount: 2,
-        furthestUserId: 2,
-        exchangeObjectId: '420'
-      });
+      const request2 = httpTestingController
+        .expectOne(FetchCommentList.methode.name + '?exchangeObjectId=420&amount=2&furthestCommentId=2');
 
       const res2: FetchCommentList.Response = {
         commentList: mockCommentList.slice(2, 4)
       };
-      request.flush(res2);
+      request2.flush(res2);
 
 
       httpTestingController.verify();
@@ -179,29 +166,20 @@ describe('CommentService', () => {
 
       sub.next(2);
 
-      const request = httpTestingController.expectOne(FetchCommentList.methode.name);
-      expect(request.request.body).toEqual({
-        amount: 2,
-        furthestUserId: undefined,
-        exchangeObjectId: '420'
-      });
+      const request = httpTestingController.expectOne(FetchCommentList.methode.name + '?exchangeObjectId=420&amount=2');
 
       const res: FetchCommentList.Response = {
         commentList: mockCommentList.slice(0, 2)
       };
       request.flush(res);
 
-      const request2 = httpTestingController.expectOne(FetchCommentList.methode.name);
-      expect(request2.request.body).toEqual({
-        amount: 2,
-        furthestUserId: 2,
-        exchangeObjectId: '420'
-      });
+      const request2 = httpTestingController
+        .expectOne(FetchCommentList.methode.name + '?exchangeObjectId=420&amount=2&furthestCommentId=2');
 
       const res2: FetchCommentList.Response = {
         commentList: mockCommentList.slice(2, 4)
       };
-      request.flush(res2);
+      request2.flush(res2);
 
 
       httpTestingController.verify();
@@ -219,14 +197,9 @@ describe('CommentService', () => {
         }
       });
 
-      sub.next(4);
+      sub.next(5);
 
-      const request = httpTestingController.expectOne(FetchCommentList.methode.name);
-      expect(request.request.body).toEqual({
-        amount: 4,
-        furthestUserId: undefined,
-        exchangeObjectId: '420'
-      });
+      const request = httpTestingController.expectOne(FetchCommentList.methode.name + '?exchangeObjectId=420&amount=5');
 
       const res: FetchCommentList.Response = {
         commentList: mockCommentList.slice(0, 4)
